@@ -1,0 +1,36 @@
+% sections/00_titlepage.tex
+
+% Define a custom spacing command just for this title
+% Usage: \spacedcaps{TEXT}
+% Arguments: {font}{inter-letter-space}{inner-space}{outer-space}
+\sodef\spacedcaps{}{0.1em}{0.75em}{1em}
+
+\begin{titlepage}
+	\thispagestyle{empty}
+	\vspace*{3cm}
+
+	% --- REPORT TYPE ---
+	% We use \spacedcaps defined above instead of \textls
+	{\sffamily\bfseries\color{gray}\spacedcaps{\MakeUppercase{State of the Art Report}} \par}
+
+	% --- DECORATIVE LINE ---
+	\vspace{0.4cm}
+	% {\color{kaoblue}\hrule height 2pt}
+	% \vspace{0.8cm}
+
+	% --- TITLE ---
+	{\raggedright\sffamily\bfseries\Huge\color{kaoblue}
+		Causal Machine Learning for\\ Conflict Research \par}
+
+	\vspace{0.5cm}
+	{\color{kaoblue}\hrule height 2pt}
+	\vspace{1.5cm}
+	% --- AUTHOR INFO ---
+	{\sffamily\Large \textbf{Niklas Bitzer} \par}
+	{\sffamily\large Karlsruhe Institute of Technology \par}
+
+	% --- DATE ---
+	\vfill
+	{\sffamily\color{gray} \today \par}
+
+\end{titlepage}

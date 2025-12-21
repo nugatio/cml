@@ -1,0 +1,543 @@
+%% Beispiel-Präsentation mit LaTeX Beamer im KIT-Design
+%% entsprechend den Gestaltungsrichtlinien vom Februar 2025
+%%
+%% Siehe https://sdq.kastel.kit.edu/wiki/Dokumentvorlagen
+
+%% Beispiel-Präsentation
+\documentclass{sdqbeamer} 
+ 
+%% Gruppenlogo, muss im Verzeichnis logos/ liegen
+%% falls kein Gruppenlogo gewünscht, bitte \grouplogo{} aufrufen
+% \grouplogo{sdqlogo} 
+
+%% Gruppenname und Breite (Standard: 89 mm)
+\groupname{KIT-Institut, -Forschungsgruppe, -Abteilung}
+%\groupnamewidth{89mm}
+
+% Beginn der Präsentation
+
+\title[KIT-Beamer-Vorlage]{Präsentation mit \LaTeX{} Beamer im KIT-Design}
+\subtitle{entsprechend den Gestaltungsrichtlinien von Februar 2025} 
+\author[Erik Burger]{Dr.-Ing. Erik Burger}
+
+\date[3.\,11.\,2025]{5. November 2025}
+
+% Literatur 
+ 
+\usepackage[citestyle=authoryear,bibstyle=numeric,hyperref,backend=biber]{biblatex}
+\addbibresource{presentation.bib}
+\bibhang1em
+
+\usepackage{lipsum}
+
+\begin{document}
+
+%Titelseite
+\begin{frame}[title white vertical, picture=images/palladio_bauplan]
+	\titlepage
+\end{frame}
+
+\begin{frame}[title blue vertical, picture=images/palladio_bauplan]
+	\titlepage
+\end{frame}
+
+\begin{frame}[title green horizontal, picture=images/palladio_bauplan, kitlogo=white]
+\titlepage
+\end{frame}
+
+\begin{frame}[title white horizontal, picture=images/palladio_bauplan, kitlogo=white]
+\titlepage
+\end{frame}
+
+\section{Erster Abschnitt}
+%Inhaltsverzeichnis
+\begin{frame}[tableofcontents=green]{Inhaltsverzeichnis grün}
+	\tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}[tableofcontents=blue]{Inhaltsverzeichnis blau}
+	\tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}[tableofcontents=red]{Inhaltsverzeichnis rot}
+	\tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}[tableofcontents=white]{Inhaltsverzeichnis weiß}
+	\tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{Inhaltsverzeichnis auf normalem Frame}
+	\tableofcontents[currentsection]
+\end{frame}
+
+\subsection{Inhaltselemente}
+
+\begin{frame}{Blöcke}{in den KIT-Farben}
+	\begin{columns}
+		\column{.95\kittwocolumns}
+		\begin{greenblock}{Greenblock}
+			Standard (\texttt{block})
+        \end{greenblock}
+		\column{.95\kittwocolumns}
+		\begin{royalblueblock}{Royalblueblock}
+			= \texttt{exampleblock}
+        \end{royalblueblock}
+		\column{.95\kittwocolumns}
+		\begin{redblock}{Redblock}
+			= \texttt{alertblock}
+        \end{redblock}
+	\end{columns}
+	\begin{columns}
+		\column{.95\kittwocolumns}
+		\begin{grayblock}{Grayblock}
+			Text
+        \end{grayblock}
+		\column{.95\kittwocolumns}
+		\begin{lightgrayblock}{Lightgrayblock}
+			Text
+        \end{lightgrayblock}
+		\column{.95\kittwocolumns}
+		\begin{blueblock}{Blueblock}
+			Text
+        \end{blueblock}
+	\end{columns}
+	\begin{columns}
+		\column{.95\kittwocolumns}
+        \begin{brownblock}{Brownblock}
+			Text
+        \end{brownblock}
+		\column{.95\kittwocolumns}
+        \begin{purpleblock}{Purpleblock}
+			Text
+        \end{purpleblock}
+		\column{.95\kittwocolumns}
+        \begin{cyanblock}{Cyanblock}
+			Text
+        \end{cyanblock}
+	\end{columns}
+	\begin{columns}
+		\column{.95\kittwocolumns}
+        \begin{yellowblock}{Yellowblock}
+			Text
+        \end{yellowblock}
+		\column{.95\kittwocolumns}
+        \begin{lightgreenblock}{Lightgreenblock}
+			Text
+        \end{lightgreenblock}
+		\column{.95\kittwocolumns}
+        \begin{orangeblock}{Orangeblock}
+			Text
+        \end{orangeblock}
+	\end{columns}
+	\begin{columns}
+		\column{.95\kittwocolumns}
+		\begin{contentblock}{Contentblock}
+			(farblos)
+		\end{contentblock}
+		\column{.95\kittwocolumns}
+		\column{.95\kittwocolumns}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Boxen}{in den KIT-Farben}
+	\begin{columns}
+		\column{\kittwocolumns}
+		\begin{greenbox}
+			Greenbox (\texttt{standardbox})
+        \end{greenbox}
+		\column{\kittwocolumns}
+		\begin{bluebox}
+			Bluebox (\texttt{highlightbox})
+        \end{bluebox}
+		\column{\kittwocolumns}
+		\begin{redbox}
+			Redbox (\texttt{alertbox})
+        \end{redbox}
+	\end{columns}
+	\vskip.5em
+	\begin{columns}
+		\column{\kittwocolumns}
+		\begin{graybox}
+			Graybox
+        \end{graybox}
+		\column{\kittwocolumns}
+		\begin{lightgraybox}
+			Lightgraybox
+        \end{lightgraybox}
+		\column{\kittwocolumns}
+		\begin{bluebox}
+			Bluebox
+        \end{bluebox}
+	\end{columns}
+	\vskip.5em
+	\begin{columns}
+		\column{\kittwocolumns}
+        \begin{brownbox}
+			Brownbox
+        \end{brownbox}
+		\column{\kittwocolumns}
+        \begin{purplebox}
+			Purplebox
+        \end{purplebox}
+		\column{\kittwocolumns}
+        \begin{cyanbox}
+			Cyanbox
+        \end{cyanbox}
+	\end{columns}
+	\vskip.5em
+	\begin{columns}
+		\column{\kittwocolumns}
+        \begin{yellowbox}
+			Yellowbox
+        \end{yellowbox}
+		\column{\kittwocolumns}
+        \begin{lightgreenbox}
+			Lightgreenbox
+        \end{lightgreenbox}
+		\column{\kittwocolumns}
+        \begin{orangebox}
+			Orangebox
+        \end{orangebox}
+	\end{columns}
+\end{frame}
+	  
+\begin{frame}{Auflistungen}
+	Text
+	\begin{itemize}
+		\item Auflistung\\ Umbruch
+		\item Auflistung
+
+		\begin{itemize} % Vor geschachtelten itemize immer Leerzeile einführen
+			\item Auflistung
+			\item Auflistung
+		\end{itemize}
+	\end{itemize}
+	\begin{enumerate}
+		\item Aufzählung
+		\item Aufzählung
+		\item Aufzählung
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Spalten}
+	\begin{columns}
+		\column{\kitcolumn}	
+		\begin{standardbox}
+			Ich bin ein Blindtext.
+		\end{standardbox}
+		\column{\kitcolumn}	
+		\begin{highlightbox}
+			Ich bin ein Blindtext.
+		\end{highlightbox}
+		\column{\kitcolumn}	
+		\begin{grayhighlightbox}
+			Ich bin ein Blindtext.
+		\end{grayhighlightbox}
+		\column{\kitcolumn}	
+		\begin{lightgrayhighlightbox}
+			Ich bin ein Blindtext.
+		\end{lightgrayhighlightbox}
+		\column{\kitcolumn}	
+		\begin{whitebox}
+			Ich bin ein Blindtext.
+		\end{whitebox}
+		\column{\kitcolumn}	
+		\begin{redbox}
+			Ich bin ein Blindtext.
+		\end{redbox}
+	\end{columns}
+	\vspace{1em}
+	\begin{columns}
+		\column{\kittwocolumns}	
+		\begin{standardbox}
+			Ich bin ein Blindtext.
+		\end{standardbox}
+		\column{\kittwocolumns}	
+		\begin{highlightbox}
+			Ich bin ein Blindtext.
+		\end{highlightbox}
+		\column{\kittwocolumns}	
+		\begin{grayhighlightbox}
+			Ich bin ein Blindtext.
+		\end{grayhighlightbox}
+	\end{columns}
+	\vspace{1em}
+	\begin{columns}
+		\column{\kitthreecolumns}	
+		\begin{standardbox}
+			Ich bin ein Blindtext.
+		\end{standardbox}
+		\column{\kitthreecolumns}	
+		\begin{highlightbox}
+			Ich bin ein Blindtext.
+		\end{highlightbox}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Spalten}
+	\begin{columns}
+		\column{\kitfourcolumns}	
+			\includegraphics[width=\linewidth, trim={0 2cm 0 2cm}, clip]{images/palladio_bauplan.jpg}
+		\column{\kittwocolumns}	
+			\begin{standardbox}
+				Beschreibung
+			\end{standardbox}
+
+			\vspace{1em}
+
+			\begin{highlightbox}
+				Dies ist ein Bauplan der berühmten Villa Rotonda. 
+			\end{highlightbox}
+
+			\vspace{1em}
+
+			\begin{graybox}
+				Foto: Klaus Krogmann
+			\end{graybox}
+	\end{columns}
+\end{frame}
+
+\section{Spezialframes}
+
+\begin{frame}{Inhaltsverzeichnis}
+	\tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}[picture 66 vertical,picture=images/palladio_bauplan,kitlogo=black]{Folie mit Bild auf $\frac{2}{3}$ Größe}
+	\lipsum[1][1-8]
+\end{frame}
+
+\begin{frame}[picture 50 vertical,picture=images/palladio_bauplan,kitlogo=black]{Folie mit Bild auf halber Größe}
+	\lipsum[1][1-16]
+\end{frame}
+
+\begin{frame}[picture 33 vertical,picture=images/palladio_bauplan,kitlogo=white]{Folie mit Bild auf $\frac{1}{3}$ Größe}
+	\begin{columns}
+		\column{\kittwocolumns}	
+		\lipsum[1][1-8]
+		\column{\kittwocolumns}	
+		\lipsum[1][1-8]
+	\end{columns}
+\end{frame}
+
+
+\begin{frame}[picture vertical=20,picture=images/palladio_bauplan,kitlogo=white]{Folie mit Bild auf variabler Größe (20 \%)}
+	\lipsum[1][1-16]
+\end{frame}
+
+\section{Titel-/Fußzeile}
+\begin{frame}[tableofcontents=blue]{Inhaltsverzeichnis}
+	\tableofcontents[currentsection]
+\end{frame}
+\begin{frame}
+        Bei Frames ohne Titel wird die Kopfzeile nicht angezeigt, und  
+    der freie Platz kann für Inhalte genutzt werden.
+\end{frame}
+
+\begin{frame}[plain]
+    Bei Frames mit Option \texttt{[plain]} werden weder Kopf- noch Fußzeile angezeigt.
+\end{frame}
+
+\begin{frame}[t]{Beispielinhalt}
+    Bei Frames mit Option \texttt{[t]} werden die Inhalte nicht vertikal zentriert, sondern an der Oberkante begonnen.
+\end{frame}
+
+
+\begin{frame}{Beispielinhalt: Literatur}
+    Literaturzitat: \cite{klare2021jss}
+\end{frame}
+
+\appendix
+\beginbackup
+
+\begin{frame}{Literatur}
+\begin{exampleblock}{Backup-Teil}
+    Folien, die nach \texttt{\textbackslash beginbackup} eingefügt werden, zählen nicht in die Gesamtzahl der Folien.
+\end{exampleblock}
+
+\printbibliography
+\end{frame}
+
+\section{Farben}
+%% ----------------------------------------
+%% | Test-Folie mit definierten Farben |
+%% ----------------------------------------
+\begin{frame}{Farbpalette}
+\vskip-2em
+\newcommand{\csq}{\strut\hskip1.2em}
+\begin{tabular}{rccccccccccccc}
+	& 100 & 90 & 80 & 70 & 60 & 50 & 40 & 30 & 25 & 20 & 15 & 10 & 5\\
+% GREEN
+	kit-green
+	& \colorbox{kit-green100}{\csq}
+	& \colorbox{kit-green90}{\csq}
+	& \colorbox{kit-green80}{\csq}
+	& \colorbox{kit-green70}{\csq}
+	& \colorbox{kit-green60}{\csq}
+	& \colorbox{kit-green50}{\csq}
+	& \colorbox{kit-green40}{\csq}
+	& \colorbox{kit-green30}{\csq}
+	& \colorbox{kit-green25}{\csq}
+	& \colorbox{kit-green20}{\csq}
+	& \colorbox{kit-green15}{\csq}
+	& \colorbox{kit-green10}{\csq}
+	& \colorbox{kit-green5}{\csq}\\[.5em]
+% ROYAL BLUE
+	kit-royalblue
+	& \colorbox{kit-royalblue100}{\csq}
+	& \colorbox{kit-royalblue90}{\csq}
+	& \colorbox{kit-royalblue80}{\csq}
+	& \colorbox{kit-royalblue70}{\csq}
+	& \colorbox{kit-royalblue60}{\csq}
+	& \colorbox{kit-royalblue50}{\csq}
+	& \colorbox{kit-royalblue40}{\csq}
+	& \colorbox{kit-royalblue30}{\csq}
+	& \colorbox{kit-royalblue25}{\csq}
+	& \colorbox{kit-royalblue20}{\csq}
+	& \colorbox{kit-royalblue15}{\csq}
+	& \colorbox{kit-royalblue10}{\csq}
+	& \colorbox{kit-royalblue5}{\csq}\\[.5em]
+% BLUE
+	kit-blue
+	& \colorbox{kit-blue100}{\csq}
+	& \colorbox{kit-blue90}{\csq}
+	& \colorbox{kit-blue80}{\csq}
+	& \colorbox{kit-blue70}{\csq}
+	& \colorbox{kit-blue60}{\csq}
+	& \colorbox{kit-blue50}{\csq}
+	& \colorbox{kit-blue40}{\csq}
+	& \colorbox{kit-blue30}{\csq}
+	& \colorbox{kit-blue25}{\csq}
+	& \colorbox{kit-blue20}{\csq}
+	& \colorbox{kit-blue15}{\csq}
+	& \colorbox{kit-blue10}{\csq}
+	& \colorbox{kit-blue5}{\csq}\\[.5em]
+% ICE BLUE
+	kit-iceblue
+	& \colorbox{kit-iceblue100}{\csq}
+	& \colorbox{kit-iceblue90}{\csq}
+	& \colorbox{kit-iceblue80}{\csq}
+	& \colorbox{kit-iceblue70}{\csq}
+	& \colorbox{kit-iceblue60}{\csq}
+	& \colorbox{kit-iceblue50}{\csq}
+	& \colorbox{kit-iceblue40}{\csq}
+	& \colorbox{kit-iceblue30}{\csq}
+	& \colorbox{kit-iceblue25}{\csq}
+	& \colorbox{kit-iceblue20}{\csq}
+	& \colorbox{kit-iceblue15}{\csq}
+	& \colorbox{kit-iceblue10}{\csq}
+	& \colorbox{kit-iceblue5}{\csq}\\[.5em]
+% RED
+	kit-red
+	& \colorbox{kit-red100}{\csq}
+	& \colorbox{kit-red90}{\csq}
+	& \colorbox{kit-red80}{\csq}
+	& \colorbox{kit-red70}{\csq}
+	& \colorbox{kit-red60}{\csq}
+	& \colorbox{kit-red50}{\csq}
+	& \colorbox{kit-red40}{\csq}
+	& \colorbox{kit-red30}{\csq}
+	& \colorbox{kit-red25}{\csq}
+	& \colorbox{kit-red20}{\csq}
+	& \colorbox{kit-red15}{\csq}
+	& \colorbox{kit-red10}{\csq}
+	& \colorbox{kit-red5}{\csq}\\[.5em]
+% GREY
+	kit-gray	
+	& \colorbox{kit-gray100}{\csq}
+	& \colorbox{kit-gray90}{\csq}
+	& \colorbox{kit-gray80}{\csq}
+	& \colorbox{kit-gray70}{\csq}
+	& \colorbox{kit-gray60}{\csq}
+	& \colorbox{kit-gray50}{\csq}
+	& \colorbox{kit-gray40}{\csq}
+	& \colorbox{kit-gray30}{\csq}
+	& \colorbox{kit-gray25}{\csq}
+	& \colorbox{kit-gray20}{\csq}
+	& \colorbox{kit-gray15}{\csq}
+	& \colorbox{kit-gray10}{\csq}
+	& \colorbox{kit-gray5}{\csq}\\[.5em]
+% Orange
+	kit-orange
+	& \colorbox{kit-orange100}{\csq}
+	& \colorbox{kit-orange90}{\csq}
+	& \colorbox{kit-orange80}{\csq}
+	& \colorbox{kit-orange70}{\csq}
+	& \colorbox{kit-orange60}{\csq}
+	& \colorbox{kit-orange50}{\csq}
+	& \colorbox{kit-orange40}{\csq}
+	& \colorbox{kit-orange30}{\csq}
+	& \colorbox{kit-orange25}{\csq}
+	& \colorbox{kit-orange20}{\csq}
+	& \colorbox{kit-orange15}{\csq}
+	& \colorbox{kit-orange10}{\csq}
+	& \colorbox{kit-orange5}{\csq}\\[.5em]
+% lightgreen
+	kit-lightgreen
+	& \colorbox{kit-lightgreen100}{\csq}
+	& \colorbox{kit-lightgreen90}{\csq}
+	& \colorbox{kit-lightgreen80}{\csq}
+	& \colorbox{kit-lightgreen70}{\csq}
+	& \colorbox{kit-lightgreen60}{\csq}
+	& \colorbox{kit-lightgreen50}{\csq}
+	& \colorbox{kit-lightgreen40}{\csq}
+	& \colorbox{kit-lightgreen30}{\csq}
+	& \colorbox{kit-lightgreen25}{\csq}
+	& \colorbox{kit-lightgreen20}{\csq}
+	& \colorbox{kit-lightgreen15}{\csq}
+	& \colorbox{kit-lightgreen10}{\csq}
+	& \colorbox{kit-lightgreen5}{\csq}\\[.5em]
+% Brown
+	kit-brown
+	& \colorbox{kit-brown100}{\csq}
+	& \colorbox{kit-brown90}{\csq}
+	& \colorbox{kit-brown80}{\csq}
+	& \colorbox{kit-brown70}{\csq}
+	& \colorbox{kit-brown60}{\csq}
+	& \colorbox{kit-brown50}{\csq}
+	& \colorbox{kit-brown40}{\csq}
+	& \colorbox{kit-brown30}{\csq}
+	& \colorbox{kit-brown25}{\csq}
+	& \colorbox{kit-brown20}{\csq}
+	& \colorbox{kit-brown15}{\csq}
+	& \colorbox{kit-brown10}{\csq}
+	& \colorbox{kit-brown5}{\csq}\\[.5em]
+% Purple
+	kit-purple
+	& \colorbox{kit-purple100}{\csq}
+	& \colorbox{kit-purple90}{\csq}
+	& \colorbox{kit-purple80}{\csq}
+	& \colorbox{kit-purple70}{\csq}
+	& \colorbox{kit-purple60}{\csq}
+	& \colorbox{kit-purple50}{\csq}
+	& \colorbox{kit-purple40}{\csq}
+	& \colorbox{kit-purple30}{\csq}
+	& \colorbox{kit-purple25}{\csq}
+	& \colorbox{kit-purple20}{\csq}
+	& \colorbox{kit-purple15}{\csq}
+	& \colorbox{kit-purple10}{\csq}
+	& \colorbox{kit-purple5}{\csq}\\[.5em]
+% Cyan
+	kit-cyan
+	& \colorbox{kit-cyan100}{\csq}
+	& \colorbox{kit-cyan90}{\csq}
+	& \colorbox{kit-cyan80}{\csq}
+	& \colorbox{kit-cyan70}{\csq}
+	& \colorbox{kit-cyan60}{\csq}
+	& \colorbox{kit-cyan50}{\csq}
+	& \colorbox{kit-cyan40}{\csq}
+	& \colorbox{kit-cyan30}{\csq}
+	& \colorbox{kit-cyan25}{\csq}
+	& \colorbox{kit-cyan20}{\csq}
+	& \colorbox{kit-cyan15}{\csq}
+	& \colorbox{kit-cyan10}{\csq}
+	& \colorbox{kit-cyan5}{\csq}\\[.5em]
+\end{tabular}
+\end{frame}
+%% ----------------------------------------
+%% | /Test-Folie mit definierten Farben |
+%% ----------------------------------------
+\backupend
+
+\end{document}

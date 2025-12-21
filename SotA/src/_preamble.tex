@@ -1,0 +1,94 @@
+% _preamble.tex
+\documentclass[
+    fontsize=11pt,
+    paper=a4,
+    twoside=false,
+    parskip=half,      % Nice vertical space between paragraphs
+    numbers=noenddot   % "1 Introduction" instead of "1. Introduction"
+]{scrartcl}
+
+% --- 1. PAGE GEOMETRY (Fixed: Not Squished) ---
+\usepackage[
+    top=3cm,
+    bottom=3cm,
+    left=3cm,
+    right=3cm
+]{geometry}
+
+% --- 2. FONTS (Robust & Clean) ---
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{soul}
+\usepackage{graphicx} % <--- ADDED: Required for \scalebox on title page
+
+% Serif: Palatino (Elegant body text)
+\usepackage{mathpazo}
+% Sans-Serif: Helvetica (Clean headers)
+\usepackage[scaled=0.95]{helvet}
+% Monospace: Inconsolata (Code)
+\usepackage[varqu,varl,var0]{inconsolata}
+
+% --- 3. COLORS & LINKS ---
+\usepackage[table,xcdraw]{xcolor}
+
+% GLOBAL COLOR CHANGE: KIT GREEN (0, 150, 130)
+% We keep the name 'kaoblue' so the rest of the template works without changes,
+% but we assign it the KIT Green values.
+\definecolor{kaoblue}{RGB}{0, 150, 130}
+\definecolor{kaodark}{RGB}{20, 20, 20}
+
+\usepackage[
+    colorlinks=true,
+    linkcolor=kaoblue,
+    citecolor=kaoblue,
+    urlcolor=kaoblue,
+    breaklinks=true
+]{hyperref}
+
+% --- 4. HEADERS & TITLES ---
+\usepackage{scrlayer-scrpage}
+\clearpairofpagestyles
+\ihead{\sffamily\bfseries\headmark}
+\ohead{\pagemark}
+\automark{section}
+\pagestyle{scrheadings}
+
+% Section Fonts (Helvetica + KIT Green)
+\addtokomafont{section}{\sffamily\color{kaoblue}\LARGE}
+\addtokomafont{subsection}{\sffamily\color{kaoblue}\Large}
+\addtokomafont{subsubsection}{\sffamily\color{kaoblue}\normalsize}
+
+% --- 5. MATH & CAUSAL MACROS ---
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{bm}
+
+\newcommand{\indep}{\perp \!\!\! \perp}
+\newcommand{\doop}[1]{\mathrm{do}(#1)}
+\newcommand{\E}{\mathbb{E}}
+
+% --- 6. BIBLIOGRAPHY ---
+\usepackage[
+    backend=biber,
+    style=numeric-comp,
+    maxbibnames=10,
+    sorting=none
+]{biblatex}
+\addbibresource{references.bib}
+
+% --- 7. CODE BLOCKS ---
+\usepackage{listings}
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    frame=lines,
+    rulecolor=\color{gray!30},
+    backgroundcolor=\color{gray!5},
+    keywordstyle=\color{kaoblue}\bfseries
+}
+
+% --- 8. REFERENCING ---
+\usepackage[capitalise,noabbrev]{cleveref}
+
+\begin{document}

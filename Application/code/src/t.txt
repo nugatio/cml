@@ -1,0 +1,129 @@
+1:
+
+500
+None
+1
+sqrt
+False
+
+1000
+500
+20
+5
+0.5
+67
+
+2:
+
+100
+None
+5
+sqrt
+True
+
+100
+500
+50
+5
+0.5
+67
+
+3:
+
+500
+None
+5
+sqrt
+True
+
+100
+500
+20
+5 0.5
+67
+
+4:
+
+500
+None
+5
+None
+True
+
+100
+500
+20
+5 0.5
+67
+
+5:
+
+500
+None
+1
+None
+True
+
+100
+500
+20
+5 0.5
+67
+
+6:
+
+500
+None
+1
+None
+False
+
+1000
+500
+20
+5 0.5
+67
+
+7:
+
+200
+False
+
+100
+500
+20
+5 0.5
+67
+
+
+M:
+N_SIMS = 500
+N_SAMPLES = 1000
+N_VARS = 20
+N_SPLITS = 5
+THETA_GT = 0.5
+SEED = 67
+
+RF_PARAMS = {
+    "n_estimators": 250,
+    "max_depth": None,
+    "min_samples_leaf": 1,
+    "max_features": "sqrt",
+    "bootstrap": False,
+}
+
+M:
+N_SIMS = 100
+N_SAMPLES = 500
+N_VARS = 20
+N_SPLITS = 5
+THETA_GT = 0.5
+SEED = 67
+
+RF_PARAMS = {
+    "n_estimators": 250,
+    "max_depth": None,
+    "min_samples_leaf": 1,
+    "max_features": "sqrt",
+    "bootstrap": False,
+}
