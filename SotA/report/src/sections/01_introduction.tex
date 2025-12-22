@@ -1,4 +1,7 @@
 \section{Introduction}
 \label{sec:intro}
 
-Extends causal forests to panel data under parallel trends assumption (DiDCF method). Enables data-driven heterogeneous treatment effect discovery in staggered treatment designs without requiring random assignment. Builds on Athey \& Imbens (2022) changes-in-changes framework. Particularly useful when treatment timing varies across units.
+Availability of high-dimensional, fine-grained spatio-temporal data trough remote sensing \cite{racek_conflict_2024} or the emergence of new conflict event databases \cite{hegre_introducing_2020} has transformed conflict research in recent years. Additionally, advancements in machine learning has lead to substantive success in forecasting timing and location as well as fatalities of conflict \cite{racek_capturing_2025, hegre_202324_2025, fritz_role_2022}.
+For policymakers and humanitarian organizatios who seek to prevent conflict, allocate aid or guide post-conflict recovery, simply anticipationg where and when conflict will occur is insuefficient; they need to understand the drivers of armed confilct.
+This necessitates moving from pure forecasting to causal inference, enabling the determination of the causal impact of specific interventions (e.g., foreign aid allocation, or economic support programs) and external shocks (e.g., terrorist attacks or economic shocks).
+While existing machine learning models can forecast conflict with increasing accuracy, they are inherently limited in their ability to unrderstand underlaying causes,  and bridging this gap between prediction and explanation remains a key challenges in the field \cite{feuerriegel_causal_2024, murphy_promise_2024}.
