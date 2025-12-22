@@ -47,14 +47,38 @@
 ]{hyperref}
 
 % --- 4. HEADERS & TITLES ---
-\usepackage{scrlayer-scrpage}
+\usepackage[automark]{scrlayer-scrpage}
+
+% Clear all defaults
 \clearpairofpagestyles
-\ihead{\sffamily\bfseries\headmark}
-\ohead{\pagemark}
-\automark{section}
+
+
+% --- HEADER CONFIGURATION ---
+% Left Header: The specific title of your work
+\ihead{\sffamily\ Causal Machine Learning for Conflict Research}
+
+% Right Header: The type of document
+\ohead{\sffamily\ State of the Art Report}
+
+% --- FOOTER CONFIGURATION ---
+% Center Footer: Page number
+\cfoot{\sffamily\pagemark}
+
+% --- STYLING ---
+% Add a visual line under the header to separate it from text
+\KOMAoptions{headsepline=true}
+\setkomafont{headsepline}{\color{gray}}
+
+% Ensure the style is applied
 \pagestyle{scrheadings}
 
-% Section Fonts (Helvetica + KIT Green)
+\RedeclareSectionCommand[
+  beforeskip=-1\baselineskip,
+  afterskip=0.5\baselineskip
+]{section}
+
+% --- SECTION FONTS ---
+% (Keeping your existing font settings)
 \addtokomafont{section}{\sffamily\color{kaoblue}\LARGE}
 \addtokomafont{subsection}{\sffamily\color{kaoblue}\Large}
 \addtokomafont{subsubsection}{\sffamily\color{kaoblue}\normalsize}

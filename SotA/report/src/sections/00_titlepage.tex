@@ -1,0 +1,38 @@
+% sections/00_titlepage.tex
+
+\begin{titlepage}
+	\thispagestyle{empty}
+	\vspace*{3cm}
+
+	% --- REPORT TYPE: GREEN BADGE STYLE ---
+	% \fboxsep controls the space between the text and the edge of the box.
+	% 6pt is usually the sweet spot (not too fat, not too tight).
+	\setlength{\fboxsep}{6pt}
+
+	\noindent\colorbox{kaoblue}{%
+		\sffamily\bfseries\Large\color{white}
+		\MakeUppercase{State of the Art Report}%
+	} \par
+
+	% --- TITLE: DEEP BLACK ---
+	% We use \vspace to separate the badge from the title
+	\vspace{0.25cm}
+
+	{\raggedright\sffamily\bfseries\Huge\color{black}
+		Causal Machine Learning for\\ Conflict Research \par}
+
+	% --- DECORATIVE LINE (Optional) ---
+	% A thin green line below the title ties it all together
+	\vspace{0.25cm}
+	{\hrule height 2pt}
+	\vspace{1.5cm}
+
+	% --- AUTHOR INFO ---
+	{\sffamily\Large \textbf{Niklas Bitzer} \par}
+	{\sffamily\large Karlsruhe Institute of Technology \par}
+
+	% --- DATE ---
+	\vfill
+	{\sffamily\color{gray} \today \par}
+
+\end{titlepage}
