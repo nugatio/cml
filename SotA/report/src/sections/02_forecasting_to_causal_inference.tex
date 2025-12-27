@@ -2,4 +2,22 @@
 % \section{Limits of Forecasting}
 \label{sec:forecasting_to_causal_inference}
 
-test
+\subsection{The State of the Art in Conflict Forecasting}
+Contemporary conflict forecasting has moved beyond small-scale country-specific desings used in earlier research \cite{cederman_predicting_2017, hegre_introduction_2017}.
+Trough efforts, such as the Violence and Impacts Early-Warning System (VIEWS) \cite{hegre_views_2019} or ACLED Volatility Risk Index/CAST \cite{rod_review_2024} and a "revolution" in data as well as methodology, the scope and predictive performance of forecasting in conflict research increased substantially \cite{croicu_forecasting_2025}.
+Current data---led by datasets such as the Uppsala Conflict Data Program's Georeferenced Event Dataset (UCDP GED) \cite{sundberg_introducing_2013} or the Armed Conflict Event and Location Dataset (ACLED) \cite{raleigh_introducing_2010}---caputers local dynamics troguh global collections of individual armed conflict events on a daily basis over a long time-series.
+This highpy disaggregated microdata with millions of data-points is then often leveraged to perform a spatio-temporal aggregation; typically a PRIO-GRID lattice \cite{tollefsen_prio-grid_2012} with $0.5^\circ \times 0.5^\circ$ spatil grid cells ($55 \times 55$ km$^2$ at the equator) with a monthly temporal resolution is used \cite{hegre_202324_2025, hegre_views_2019}.
+These event-based frameworks are usually complemented with structural covarites---static, long-term data like economic and social indicators---to combine conflict dynamics with underlying socio-economic conditions \cite{tollefsen_prio-grid_2012, hegre_views_2019, rod_review_2024}.
+Furthemore, integration of remote sensing data variables (e.g., vegetation indices, satillite imagery) have further enhanced this spatial granularity \cite{mueller_monitoring_2021, mhanna_using_2023, racek_conflict_2024}.
+
+Methodologically, most of todays approaches are using non-parametric ensembles (e.g., XGBoost or Random Forests) that excel at capturing non-lienear interactios and minimize predictive error (e.g., Brier scores) \cite{hegre_views_2019, hegre_views2020_2021}.
+Some frontier models also adopt deep learning approaches that autonomously learn representations and capture intricate long-term temporal dependincies.
+Examples include Long Short-Term Memory (LSTM) networks, Recurrent Naural Networks (RNNs) or Transformers (e.g., Temporal Fusion Transformer (TFTs)) \cite{hegre_202324_2025, vesco_united_2022}.
+While such "black box" ML models maximize metris like AUROC...
+
+\subsection{The Missing Causal Uderestanding}
+
+
+% The VIEWS (Violence \& Impacts Early-Warning System) prediction challenge has emerged as the gold standard for benchmarking forecasting models in this domain \citep{hegre2025views}. This collaborative effort has spurred methodological innovation across diverse algorithmic approaches, from gradient-boosted trees and complex ensembles to neural networks. Notably, \citet{racek2025capturing} develop a generalized additive model (GAM) with nonparametric smoothing that captures spatio-temporal diffusion effects across distances up to 550 km and time lags of 24 months. Their model, fit to 10,640 grid cells across Africa over 252 monthly observations (2000--2020), achieves 33.5\% out-of-sample explained deviance while maintaining full interpretability of all parameters---a deliberate departure from black-box machine learning approaches. This dataset and modeling framework provides the foundation for the present project.
+
+% Despite these advances, the VIEWS competition revealed a sobering insight: even sophisticated models are frequently outperformed by a simple ``no-change'' baseline that predicts null change in fatalities, particularly for conflict onset in previously peaceful locations \citep{hegre2025views}. This observation underscores that predictive accuracy alone, however impressive, cannot answer the questions most relevant to policy intervention.

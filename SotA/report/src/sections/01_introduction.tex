@@ -10,7 +10,7 @@ Progressing from prediction to explanation remains a key challenge in the field 
 
 The high demensionality of conflict data is characterized by the common usage of fine-grained spatial grid cells with monthly observations \cite{hegre_202324_2025, racek_capturing_2025, ge_modelling_2022}.
 For instance, \textcite{racek_capturing_2025} employed 10,640 grid cells ($0.5^\circ \times 0.5^\circ$ lattice) covering Africa with monthly data from 2000 to 2020.
-As a resulta, traditional parametric approaches often fail in these settings due to the large number of potential confounders and the curse of dimensionality \cite{belloni_high-dimensional_2014}.
+As a result, traditional parametric approaches often fail in these settings due to the large number of potential confounders and the curse of dimensionality \cite{belloni_high-dimensional_2014}.
 While standard non-parametric ML methods (e.g., Random Forests, Gradient Boosting) can effectively navigate this complexity to optimize predictive performance, they fail to provide valid causal inference due to the inherent introduction of regularization bias \cite{chernozhukov_doubledebiased_2018, athey_machine_2019}.
 Double Machine Learning (DML) offers a solution to these fundamental limitations by orthogonalizing the estimation problem and separating the prediction of nuisance functions from the estimation of causal parameters \cite{chernozhukov_doubledebiased_2018}.
 Consequently, one can retain the flexibility of modern ML methods to adequately adjust for observed confounding variables while obtaining unbiased estimates of treatment effects, making it highly suited for causal inference tasks with high-dimensional data \cite{chernozhukov_applied_2024, kaddour_causal_2022}.
@@ -24,5 +24,5 @@ To ensure accurate estimation, causal frameworks must be adapted to explicitly m
 
 This report reviews the methodological foundations and the current state of the art for applying Causal Machine Learning (CML), specifically Double Machine Learning, to spatio-temporal data in the context of conflict research.
 \Cref{sec:forecasting_to_causal_inference} covers current conflict forecasting literature and motivates the shift towards causal inference.
-\Cref{sec:dml} outlines the theoretical foundations of Double Machine Learning, followed by a discussion of the challenges and solutions regarding spatial and temporal dependencies in \cref{sec:spatio_temporal}.
+\Cref{sec:dml} outlines the theoretical foundations of DML, followed by a discussion of the challenges and solutions regarding spatial and temporal dependencies in \cref{sec:spatio_temporal}.
 Finally, \cref{sec:research_gap} identifies existing research gaps in applying DML to estimate the diffusion of intervention effects within conflict systems.
