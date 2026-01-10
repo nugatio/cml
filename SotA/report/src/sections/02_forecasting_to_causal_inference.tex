@@ -20,10 +20,20 @@ Most empirical studies also treat conflict diffusion simply as a nuisance, contr
 Research by \textcite{racek_capturing_2025} addresses these gaps by utilizing a Generalized Additive Model (GAM) with non-parametric smoothing.
 Therefore, the model can capture the spatio-temporal diffusion of conflict over large distances and temporal lags of up to 24 months while remaining fully interpretable.
 
-\subsection{The Missing Causal Uderestanding}
-tata
+\subsection{The Missing Causal Underestanding}
+The majority of current research in the field is focused on forecasting, with models designed to maximize predictive accuracy over interpretability, leaving the understanding of conflict's root causes and treatment evaluation underexplored \cite{murphy_promise_2024, cederman_predicting_2017}.
+Yet, as \textcite[23]{cederman_predicting_2017} argue, "theory-free prediction does little to guide intervention without knowledge about the drivers of conflict". %???
+Since prediction and explanation represent distinct epistemological goals, a model that excels at forecasting with high accuracy may reveal nothing about underlying mechanisms and relations \cite{shmueli_explain_2010}.
+Therefore, architecture selection often involves a trade-off between model accuracy and explanatory capabilities \cite{breiman_statistical_2001}.
+Even if the prediction accuracy of a model is high---for instance, successfully forecasting increasing levels of violence---policymakers may lack trust to take action and authorize costly interventions \cite{chadefaux_conflict_2017, rudin_stop_2019}.
+Furthermore, even fully interpretable models like GAMs cannot differentiate between causation and correlation; as \textcite{cederman_predicting_2017} note, forecasting models identify correlates of conflict, not causes.
+Crucially, policy decisions require counterfactual reasoning, which purely observational forecasting models cannot answer \cite{feuerriegel_causal_2024}.
+Relying on associations without considering confounding or reverse causality can therefore lead to misguided policies and interventions (e.g., erroneous foreign aid allocation, ineffective military actions) \cite{nunn_us_2014, papadogeorgou_causal_2022}.
+Causal inference, specifically Causal Machine Learning (CML), bridges this gap by enabling valid statistical inference for treatment effects while utilizing high-dimensional data \cite{athey_machine_2019, feuerriegel_causal_2024}.
 
-
-% The VIEWS (Violence \& Impacts Early-Warning System) prediction challenge has emerged as the gold standard for benchmarking forecasting models in this domain \citep{hegre2025views}. This collaborative effort has spurred methodological innovation across diverse algorithmic approaches, from gradient-boosted trees and complex ensembles to neural networks. Notably, \citet{racek2025capturing} develop a generalized additive model (GAM) with nonparametric smoothing that captures spatio-temporal diffusion effects across distances up to 550 km and time lags of 24 months. Their model, fit to 10,640 grid cells across Africa over 252 monthly observations (2000--2020), achieves 33.5\% out-of-sample explained deviance while maintaining full interpretability of all parameters---a deliberate departure from black-box machine learning approaches. This dataset and modeling framework provides the foundation for the present project.
-
-% Despite these advances, the VIEWS competition revealed a sobering insight: even sophisticated models are frequently outperformed by a simple ``no-change'' baseline that predicts null change in fatalities, particularly for conflict onset in previously peaceful locations \citep{hegre2025views}. This observation underscores that predictive accuracy alone, however impressive, cannot answer the questions most relevant to policy intervention.
+\subsection{Causal Machine Learning}
+Causal effect estimation is challenging because of the inability to observe both treated and untreated potential outcomes for the same unit simultaneously; this is generally referred to as the fundamental problem of causal inference \cite{holland_statistics_1986}.
+CML addresses this by combining the flexible estimation power of ML with principles from causal inference \cite{athey_machine_2019, chen_recent_2025}.
+While traditional econometric approaches struggle with high-dimensional covariate spaces \cite{belloni_high-dimensional_2014} and standard ML methods introduce regularization bias \cite{feuerriegel_causal_2024, kaddour_causal_2022}, CML builds on the potential outcomes framework \cite{rubin_estimating_1974} to formalize causal inference trough counterfactual reasoning and relax restrictive parametric assumptions of traditional regressions \cite{athey_machine_2019, fuhr_estimating_2024}.
+This means explicitly modeling the confounding structure by flexibly approximating nuisance functions and adjusting for high-dimensional confounding without restrictive parametric assumptions \cite{feuerriegel_causal_2024}.
+The framework therefore allows for valid effect estimation in environments with a high number of covariates \cite{belloni_high-dimensional_2014} and complex non-linear relations \cite{fuhr_estimating_2024}.
