@@ -2406,6 +2406,7 @@
     <bcf:citekey order="31" intorder="1">pollmann_causal_2023</bcf:citekey>
     <bcf:citekey order="32" intorder="1">racek_capturing_2025</bcf:citekey>
     <bcf:citekey order="33" intorder="1">papadogeorgou_causal_2022</bcf:citekey>
+    <bcf:citekey order="34" intorder="1">chiang_multiway_2022</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">
@@ -2437,4 +2438,14 @@
     </bcf:sort>
   </bcf:sortingtemplate>
   <!-- DATALISTS -->
+  <bcf:datalist section="0"
+                name="nty/global//global/global/global"
+                type="entry"
+                sortingtemplatename="nty"
+                sortingnamekeytemplatename="global"
+                labelprefix=""
+                uniquenametemplatename="global"
+                labelalphanametemplatename="global"
+                namehashtemplatename="global">
+  </bcf:datalist>
 </bcf:controlfile>

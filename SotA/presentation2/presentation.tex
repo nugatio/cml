@@ -1,68 +1,38 @@
-%% Beispiel-Präsentation mit LaTeX Beamer im KIT-Design
-%% https://sdq.kastel.kit.edu/wiki/Dokumentvorlagen
+%% ----------------------------------------------------------------
+%% DOCUMENT CLASS & PACKAGES
+%% ----------------------------------------------------------------
 \documentclass{sdqbeamer}
 
-%% ----------------------------------------------------------------
-%% PACKAGES
-%% ----------------------------------------------------------------
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{listings}
 \usepackage{xcolor}
 \usepackage{booktabs}
 \usepackage{tikz}
 \usetikzlibrary{positioning, arrows.meta, shapes, calc, fit}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{graphicx}
 
-%% ----------------------------------------------------------------
-%% CODE STYLING
-%% ----------------------------------------------------------------
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
-
-\lstdefinestyle{pythonstyle}{
-    backgroundcolor=\color{backcolour},
-    commentstyle=\color{codegreen},
-    keywordstyle=\color{magenta},
-    numberstyle=\tiny\color{codegray},
-    stringstyle=\color{codepurple},
-    basicstyle=\ttfamily\scriptsize,
-    breakatwhitespace=false,
-    breaklines=true,
-    captionpos=b,
-    keepspaces=true,
-    numbers=left,
-    numbersep=5pt,
-    showspaces=false,
-    showstringspaces=false,
-    showtabs=false,
-    tabsize=2,
-    language=Python
-}
-\lstset{style=pythonstyle}
-
+% Bibliography Setup
 \usepackage[citestyle=numeric,bibstyle=numeric,hyperref,backend=biber]{biblatex}
-\addbibresource{presentation.bib}
+\addbibresource{presentation.bib} % Ensure this file exists
 \bibhang1em
 
 %% ----------------------------------------------------------------
-%% METADATA & SETUP
+%% METADATA
 %% ----------------------------------------------------------------
 
-%% Gruppenlogo (Optional)
-\grouplogo{kl.png}
+%% Group Logo (Optional)
+\grouplogo{kl.png} % Ensure this image exists
 
-%% Gruppenname
-\groupname{Praxis der Forschung - SotA Presentatio}
+%% Group Name
+\groupname{Praxis der Forschung -- SotA Presentation}
 
-%% Titel & Autor
-\title[Double Machine Learning for Spatio-Temporal Conflict Data]{State-of-the-Art Presentation: DML for Spatio-Temporal Conflict Data}
-\subtitle{State-of-the-Are Presentation | Scientific Computing Center (SCC) -- Methods for Big Data}
+%% Title & Author
+\title[Double Machine Learning for Spatio-Temporal Conflict Data]{Double Machine Learning for Spatio-Temporal Conflict Data}
+\subtitle{State-of-the-Art Report | Scientific Computing Center (SCC) -- Methods for Big Data}
 \author[Niklas Bitzer]{Niklas Bitzer}
-\date{26.11.2025}
+\date{14.01.2026}
 
 %% ----------------------------------------------------------------
 %% DOCUMENT START
@@ -70,17 +40,13 @@
 \begin{document}
 
 %% 1. TITLE PAGE
-% Using the standard template option 'title reen horizontal'
-% If you have a background image, add: picture=path/to/image
 \begin{frame}[title green horizontal, kitlogo=white]
-	\titlepage
+    \titlepage
 \end{frame}
 
-
 %% 2. TABLE OF CONTENTS
-% Using the template option to color the TOC
 \begin{frame}[tableofcontents=green]{Contents}
-	\tableofcontents
+    \tableofcontents
 \end{frame}
 
 %% ----------------------------------------------------------------
@@ -109,7 +75,7 @@
         \end{greenblock}
 
         \column{0.48\textwidth}
-		\vspace*{-4cm}
+        \vspace*{-4cm}
         \begin{royalblueblock}{Example from \textcite{racek_capturing_2025}}
             \begin{itemize}
                 \item PRIO-GRID covering Africa
@@ -119,11 +85,12 @@
             \end{itemize}
             \vspace*{\fill}
         \end{royalblueblock}
-            \centering
-            \begin{figure}
-                \includegraphics[width=0.65\linewidth, height=\textheight, keepaspectratio]{img2.png}
-            \end{figure}
 
+        \centering
+        % Ensure img2.png exists
+        \begin{figure}
+            \includegraphics[width=0.65\linewidth, height=\textheight, keepaspectratio]{img2.png}
+        \end{figure}
     \end{columns}
 \end{frame}
 
@@ -206,7 +173,7 @@
 
 \begin{frame}{From Forecasting to Causal Inference}{SotA in Forecasting}
     \begin{lightgraybox}
-        Forecasting has moved beyond small-scale country-specific designs to fine-grained event data \cite{croicu_forecasting_2025}.
+        Forecasting has moved beyond small-scale country-specific designs to fine-grained event data \cite{croicu_forecasting_2025}
     \end{lightgraybox}
 
     \vspace{1em}
@@ -237,7 +204,6 @@
 \end{frame}
 
 \begin{frame}{From Forecasting to Causal Inference}{The Missing Causal Understanding}
-    % Added [t] here to fix the alignment issue you mentioned
     \begin{columns}[t]
         \column{0.48\textwidth}
         \begin{blueblock}{Forecasting Goal}
@@ -267,7 +233,7 @@
             \item Distinct epistemological goals \cite{shmueli_explain_2010}
             \item Correlation $\neq$ Causation
             \item ``Theory-free prediction does little to guide intervention without knowledge about the drivers of conflict'' \cite[p.23]{cederman_predicting_2017}
-            \item Policy decisions require \textbf{counterfactual reasoning} \cite{feuerriegel_causal_2024}.
+            \item Policy decisions require \textbf{counterfactual reasoning} \cite{feuerriegel_causal_2024}
         \end{itemize}
     \end{redblock}
 \end{frame}
@@ -276,13 +242,12 @@
     \begin{columns}
         \column{0.95\textwidth}
         \begin{redblock}{The Fundamental Problem of Causal Inference \cite{holland_statistics_1986}}
-            The inability to observe both treated and untreated potential outcomes for the same unit simultaneously.
+            The inability to observe both treated and untreated potential outcomes for the same unit simultaneously
         \end{redblock}
     \end{columns}
 
     \vspace{1em}
 
-    % Added [t] here to align the text on the right with the list on the left
     \begin{columns}[t]
         \column{0.48\textwidth}
         \textbf{The Approach \cite{athey_machine_2019}:}
@@ -294,8 +259,7 @@
 
         \column{0.48\textwidth}
         \textbf{Heterogeneity:} \\
-        New methodological approaches focus on \textbf{Heterogeneous Treatment Effects (HTE)} by estimating the \textbf{Conditional Average Treatment Effect (CATE)} \cite{kunzel_metalearners_2019}.
-
+        New methodological approaches focus on \textbf{Heterogeneous Treatment Effects (HTE)} by estimating the \textbf{Conditional Average Treatment Effect (CATE)} \cite{kunzel_metalearners_2019}
         \vspace{0.8em}
 
         \textbf{Taxonomy:}
@@ -307,135 +271,132 @@
     \end{columns}
 \end{frame}
 
-\section{Saptio-Temporal Causal Inference}
+\section{Spatio-Temporal Causal Inference}
 
 \begin{frame}{Spatio-Temporal Causal Inference}{SUTVA Violation}
     \begin{columns}[T]
         \column{0.65\textwidth}
 
-    \textbf{The Assumption:} Stable Unit Treatment Value Assumption (SUTVA)
-    \begin{equation*}
-        Y_i(w_1, \dots, w_N) = Y_i(w_i) \quad \text{(Independence of units)}
-    \end{equation*}
+        \textbf{The Assumption:} Stable Unit Treatment Value Assumption (SUTVA)
+        \begin{equation*}
+            Y_i(d_1, \dots, d_N) = Y_i(d_i) \quad \text{(Independence of units)}
+        \end{equation*}
+        % NOTE: Changed w_i to d_i to match later DML slides
 
-            \textbf{Fails for Conflict Data \cite{racek_capturing_2025}}
+        \textbf{Fails for Conflict Data \cite{racek_capturing_2025}}
+        \begin{itemize}
+            \item \textbf{Spillover (Spatial Interference)}
+            % Treatment in cell A affects outcome in cell B
+            \item \textbf{Carryover (Temporal Persistence)}
+            % Effects of an intervention persist even after treatment has ended
+        \end{itemize}
+
+        \vspace{0.5em}
+        \begin{greenblock}{Explicit Modelling}
             \begin{itemize}
-                \item \textbf{Spillover (Spatial Interference)}
-				% Treatment in cell A affects outcome in cell B
-                \item \textbf{Carryover (Temporal Persistence)}
-				% Effects of an intervention persist even after treatment has ended
+                \item Network/Dependency Graph \cite{leung_treatment_2020}
+                \item Geometry/Ring Methods \cite{pollmann_causal_2023}
+                \item Nonparametric Smoothing \cite{racek_capturing_2025}
+                \item Stochastic Point Processes \cite{papadogeorgou_causal_2022}
             \end{itemize}
-
-            \vspace{0.5em}
-            \begin{greenblock}{Explicit Modelling}
-			\begin{itemize}
-			\item Network/Dependecy Graph \cite{leung_treatment_2020}
-			\item Geometry/Ring Methods \cite{pollmann_causal_2023}
-			\item Nonparametric Smoothing \cite{racek_capturing_2025}
-			\item Stochastic Point Processes \cite{papadogeorgou_causal_2022}
-							\end{itemize}
-            \end{greenblock}
+        \end{greenblock}
 
         \column{0.35\textwidth}
-		\vspace*{-4cm}
-            \centering
-            \begin{figure}
-                \includegraphics[width=\linewidth, height=0.9\textheight, keepaspectratio]{img1.png}
-            \end{figure}
+        \vspace*{-4cm}
+        \centering
+        % Ensure img1.png exists
+        \begin{figure}
+            \includegraphics[width=\linewidth, height=0.9\textheight, keepaspectratio]{img1.png}
+        \end{figure}
     \end{columns}
 \end{frame}
 
 \begin{frame}{Spatio-Temporal Causal Inference}{Spatial Confounding}
     \begin{columns}[T]
         \column{0.55\textwidth}
-		\textbf{Interference vs. Confounding}
-		\begin{itemize}
-			\item Interference: Outcomes spill over
-			\item Confounding: Clusters in space
-		\end{itemize}
-\vspace*{0.5em}
+        \textbf{Interference vs. Confounding}
+        \begin{itemize}
+            \item Interference: Outcomes spill over
+            \item Confounding: Clusters in space
+        \end{itemize}
+        \vspace*{0.5em}
         \textbf{The Assumption:} Unconfoundedness (Ignorability)
         \begin{redblock}{Fails for Spatial Data}
             \textbf{Spatial Confounding:} Unmeasured variables $U$ with spatial structure affect both treatment and outcome.
             \begin{itemize}
-			\item Conflict drivers are not randomly distributed
+                \item Conflict drivers are not randomly distributed
                 \item \textbf{Latent Variables ($U_i$):} Governance, terrain, ethnic tensions, culture
-                \item $\Rightarrow$ spurious treatment-outcome association
+                \item $\Rightarrow$ Spurious treatment-outcome association
             \end{itemize}
         \end{redblock}
+
         \column{0.41\textwidth}
-            \centering
+        \centering
         \begin{tikzpicture}[
             node distance=2cm,
             box/.style={rectangle, draw, minimum width=2cm, minimum height=1.5cm, font=\small},
             latent/.style={circle, draw, dashed, minimum size=2cm, font=\small},
             arrow/.style={->, >=stealth, thick}
         ]
-            \node[box] (W) {$W$};
-            \node[box, right=of W] (Y) {$Y$};
-            \node[box, above=0.8cm of W] (X) {$X$};
+            % Replaced W with D for consistency
+            \node[box] (D) {$D$};
+            \node[box, right=of D] (Y) {$Y$};
+            \node[box, above=0.8cm of D] (X) {$X$};
             \node[latent, above=0.8cm of Y] (U) {$U$};
 
-            \draw[arrow] (W) -- (Y);
-            \draw[arrow] (X) -- (W);
+            \draw[arrow] (D) -- (Y);
+            \draw[arrow] (X) -- (D);
             \draw[arrow] (X) -- (Y);
-            \draw[arrow, color=kit-red100] (U) -- (W);
+            \draw[arrow, color=kit-red100] (U) -- (D);
             \draw[arrow, color=kit-red100] (U) -- (Y);
         \end{tikzpicture}
-		\vspace{1.25em}
-            \begin{greenblock}{Mitigation Strategies}
-                \begin{itemize}
-                    \item Spatial Fixed Effects (if static)
-                    \item Spatial Basis Functions
-                    \item Distance-adjusted matching
-                \end{itemize}
-            \end{greenblock}
+        \vspace{1.25em}
+        \begin{greenblock}{Mitigation Strategies}
+            \begin{itemize}
+                \item Spatial Fixed Effects (if static)
+                \item Spatial Basis Functions
+                \item Distance-adjusted matching
+            \end{itemize}
+        \end{greenblock}
     \end{columns}
 \end{frame}
 
 \begin{frame}{Spatio-Temporal Causal Inference}{Other Challenges}
+    % CHECK: Notation updated to D for treatment to match DML section
     \begin{columns}[T]
         \column{0.48\textwidth}
 
         \begin{redblock}{i.i.d. Assumption Violated}
             \textbf{Standard ML \& Inference assume:}
             \begin{equation*}
-                (Y_i, W_i, X_i) \overset{\text{i.i.d.}}{\sim} P
+                (Y_i, D_i, X_i) \overset{\text{i.i.d.}}{\sim} P
             \end{equation*}
 
             \textbf{Spatio-temporal data:}
             \begin{equation*}
                 \text{Cov}(Y_{it}, Y_{js}) \neq 0
             \end{equation*}
-
             % {\small for units $i, j$ nearby or times $t, s$ close}
         \end{redblock}
 
         \column{0.48\textwidth}
 
         \begin{royalblueblock}{Dynamic Treatment Effects}
-            Effects unfold over time:
+            Effects unfold over time (Distributed Lag):
             \begin{equation*}
-                Y_{it} = \sum_{\ell=0}^{L} \theta_\ell \, W_{i,t-\ell} + g_0(X_{it}) + \varepsilon_{it}
+                Y_{it} = \sum_{\ell=0}^{L} \theta_\ell \, D_{i,t-\ell} + g_0(X_{it}) + \varepsilon_{it}
             \end{equation*}
-
-            % {\small $\theta_\ell$ = causal effect at lag $\ell$}
         \end{royalblueblock}
 
         \vspace{0.3em}
 
         \begin{redblock}{Challenges}
-        \begin{itemize}
-            \item \textbf{Carryover Effets:} $W_{t-1} \to Y_t$
-            \item \textbf{Feedback Loops:} $Y_{t-1} \to W_t$
-            \item \textbf{Time-varying confounding}
-        \end{itemize}
-		\end{redblock}
-
-        % \vspace{0.3em}
-
-        % {\small \textit{E.g., aid allocated because of past conflict}}
-
+            \begin{itemize}
+                \item \textbf{Carryover Effects:} $D_{t-1} \to Y_t$
+                \item \textbf{Feedback Loops:} $Y_{t-1} \to D_t$
+                \item \textbf{Time-varying confounding}
+            \end{itemize}
+        \end{redblock}
     \end{columns}
 \end{frame}
 
@@ -446,16 +407,16 @@
         \begin{column}{0.48\textwidth}
            \textbf{The Problem:}
            \begin{itemize}
-               \item Naive ML estimation of $\eta$ introduces regularization bias.
-               \item $\Rightarrow$ slower than $\sqrt{N}$ convergence for $\hat{\theta}$.
+               \item Naive ML estimation of $\eta$ introduces regularization bias
+               \item $\Rightarrow$ Slower than $\sqrt{N}$ convergence for $\hat{\theta}$
            \end{itemize}
 
            \vspace{0.5cm}
-    \begin{greenblock}{Neyman Orthogonality}
-        Score $\psi$ is Neyman orthogonal if the moment condition is insensitive to local perturbations in the nuisance parameter $\eta$:
-        $$ \partial_{\eta} E[\psi(W; \theta_0, \eta_0)][\eta - \eta_0] = 0 $$
-        \textbf{Result:} We can plug in noisy estimates $\hat{\eta}$ without creating first-order bias.
-    \end{greenblock}
+            \begin{greenblock}{Neyman Orthogonality}
+                Score $\psi$ is Neyman orthogonal if the moment condition is insensitive to local perturbations in the nuisance parameter $\eta$:
+                $$ \partial_{\eta} E[\psi(W; \theta_0, \eta_0)][\eta - \eta_0] = 0 $$
+                \textbf{Result:} We can plug in noisy estimates $\hat{\eta}$ without creating first-order bias
+            \end{greenblock}
         \end{column}
 
         \begin{column}{0.48\textwidth}
@@ -463,7 +424,7 @@
                 \textbf{The DML Algorithm:}
             \end{center}
             \begin{enumerate}
-                \item \textbf{Split} data into $K$ folds (Cross-Fitting).
+                \item \textbf{Split} data into $K$ folds (Cross-Fitting)
                 \item \textbf{Predict} nuisances using ML:
                 \[ \hat{Y} = \hat{g}(X), \quad \hat{D} = \hat{m}(X) \]
                 \item \textbf{Residualize}:
@@ -476,49 +437,47 @@
 \end{frame}
 
 \begin{frame}{Double Machine Learning}{Cross-Fitting for Spatio-Temporal Data}
-\begin{columns}{T}
-	\begin{column}{0.56\textwidth}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            Standard DML assumes independent observations (i.i.d.).
+            Our data is:
+            \begin{itemize}
+                \item \textbf{Spatially Correlated:} Conflict spills over borders.
+                \item \textbf{Temporally Dependent:} History matters.
+            \end{itemize}
 
-    Standard DML assumes independent observations (i.i.d.)
-	Our data is:
-    \begin{itemize}
-        \item \textbf{Spatially Correlated:} Conflict spills over borders.
-        \item \textbf{Temporally Dependent:} History matters.
-    \end{itemize}
+            \vspace{0.3cm}
+            \begin{greenblock}{Solutions}
+                \begin{itemize}
+                    \item \textbf{Block Cross-Fitting:}
+                    Split by Time Blocks or Spatial Clusters to preserve dependence structure
+                    \item \textbf{Multiway Clustering:}
+                    Standard errors must be clustered by Grid ID and Time ID \cite{chiang_multiway_2022}
+                \end{itemize}
+            \end{greenblock}
+        \end{column}
 
-    \vspace{0.3cm}
-	\begin{greenblock}{Solutions}
-    \begin{itemize}
-        \item \textbf{Block Cross-Fitting:}
-        Split by Time Blocks or Spatial Clusters to preserve dependence structure
-        \item \textbf{Multiway Clustering:}
-        Standard errors must clustered by Grid ID and Time ID % \cite{chiang_multiway_2022}.
-    \end{itemize}
-	\end{greenblock}
-	\end{column}
-	\begin{column}{0.40\textwidth}
+        \begin{column}{0.40\textwidth}
+            \centering
+            \begin{tikzpicture}[xscale=2, yscale=0.8]
+                % Fold 1
+                \draw[fill=blue!10, thick] (0,1) rectangle (4,2);
+                \node at (2,1.5) {\textbf{Full Sample $N$}};
 
-    \centering
-    \begin{tikzpicture}[xscale=2, yscale=0.8]
-        % Fold 1
-        \draw[fill=blue!10, thick] (0,1) rectangle (4,2);
-        \node at (2,1.5) {\textbf{Full Sample $N$}};
+                % Arrow
+                \draw[->, thick] (2,1) -- (2,0);
 
-        % Arrow
-        \draw[->, thick] (2,1) -- (2,0);
+                % Splits
+                \draw[fill=orange!20, thick] (0,-1.5) rectangle (2,-0.5);
+                \node at (1,-1) {Auxiliary ($I^c$)};
+                \node[below, font=\footnotesize] at (1,-1.5) {\textbf{Train ML} ($\hat{g}, \hat{m}$)};
 
-        % Splits
-        \draw[fill=orange!20, thick] (0,-1.5) rectangle (2,-0.5);
-        \node at (1,-1) {Auxiliary ($I^c$)};
-        \node[below, font=\footnotesize] at (1,-1.5) {\textbf{Train ML} ($\hat{g}, \hat{m}$)};
-
-        \draw[fill=green!20, thick] (2,-1.5) rectangle (4,-0.5);
-        \node at (3,-1) {Main ($I$)};
-        \node[below, font=\footnotesize] at (3,-1.5) {\textbf{Estimate} $\hat{\theta}$};
-
-    \end{tikzpicture}
-	\end{column}
-	\end{columns}
+                \draw[fill=green!20, thick] (2,-1.5) rectangle (4,-0.5);
+                \node at (3,-1) {Main ($I$)};
+                \node[below, font=\footnotesize] at (3,-1.5) {\textbf{Estimate} $\hat{\theta}$};
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{Double Machine Learning}{Methodologies \& Research Questions}
@@ -529,11 +488,9 @@
             \centering \textbf{Standard DML} \\ (PLR)
             \vspace{0.5em}
             \begin{itemize}
-			\item Which explainable causes drive the spatio-temporal diffusion of armed conflict?
-			\item \textbf{Challenges:} Spatial Confounding, Identifiability
+                \item Which explainable causes drive the spatio-temporal diffusion of armed conflict?
+                \item \textbf{Challenges:} Spatial Confounding, Identifiability
             \end{itemize}
-            % \vspace{0.5em}
-            % \tiny Ref: \cite{chernozhukov_doubledebiased_2018}
         \end{blueblock}
 
         \column{0.31\textwidth}
@@ -541,12 +498,9 @@
             \centering \textbf{DML \& DTE} \\ (Panel Data)
             \vspace{0.5em}
             \begin{itemize}
-			\item How does the treatment effect diffuse conflicts over time?
-			\item \textbf{Challenges:} DTE Challenges / Dynamic Confounding
-                % \item \footnotesize How do effects propagate over time? (Impulse Response)
+                \item How does the treatment effect diffuse conflicts over time?
+                \item \textbf{Challenges:} Dynamic Confounding, Impulse Response
             \end{itemize}
-            % \vspace{0.5em}
-            % \tiny Ref: \cite{lewis_doubledebiased_2021}
         \end{blueblock}
 
         \column{0.31\textwidth}
@@ -554,48 +508,39 @@
             \centering \textbf{DML \& HTE} \\ (CATE)
             \vspace{0.5em}
             \begin{itemize}
-			\item Which covariates have an interaction effect with the treatment's diffusion?
-			\item \textbf{Challenges:} High-Dimensionality, Identifiability
-                % \item \footnotesize Which covariates moderate the effect?
+                \item Which covariates have an interaction effect with the treatment's diffusion?
+                \item \textbf{Challenges:} High-Dimensionality, Identifiability
             \end{itemize}
-            % \vspace{0.5em}
-            % \tiny Ref: \cite{semenova_debiased_2021}
         \end{blueblock}
     \end{columns}
 \end{frame}
 
-\begin{frame}{Double Machine Learning}{DML for Dynamic Treatment Effects (Lemis \& Syrgkanis 2021)}
+\begin{frame}{Double Machine Learning}{DML for Dynamic Treatment Effects (Lewis \& Syrgkanis 2021)}
     \begin{columns}[T]
         \begin{column}{0.48\textwidth}
-                \textbf{Partially Linear Markovian Model}
+            \textbf{Partially Linear Markovian Model}
+            \vspace{0.2cm}
 
-                \vspace{0.2cm}
+            Treatments over time affect:
+            \begin{itemize}
+                \item Future states (through system dynamics)
+                \item Future treatments (through policy)
+                \item Future outcomes (directly + indirectly)
+            \end{itemize}
 
-                Treatments over time affect:
-                \begin{itemize}
-                    \item Future states (through system dynamics)
-                    \item Future treatments (through policy)
-                    \item Future outcomes (directly + indirectly)
-                \end{itemize}
+            \vspace{0.2cm}
 
-                \vspace{0.2cm}
+            \textbf{Goal:} Estimate effect of treatment at period $t$ on final outcome at different time lags
 
-                \textbf{Goal:} Estimate effect of treatment at period $t$ on final outcome, at different time lags
+            \vspace{0.2cm}
 
-                \vspace{0.2cm}
-
-                \textbf{Key Innovation:} Sequential peeling to isolate causal effects at each lag
-
-    % {\footnotesize Generalizes to Structural Nested Mean Models (SNMMs)}
-
+            \textbf{Key Innovation:} Sequential peeling to isolate causal effects at each lag
             \vspace{0.3cm}
         \end{column}
 
         \begin{column}{0.48\textwidth}
-            % Visual Timeline
             \begin{royalblueblock}{Dynamic DML Algorithm}
                 \textbf{For each time lag}:
-
                 \vspace{0.2cm}
 
                 \textbf{1. Residualize outcome}
@@ -615,11 +560,9 @@
                     \item Regress outcome residuals on treatment residuals
                     \item Account for previously estimated lags
                 \end{itemize}
-
                 \vspace{0.2cm}
             \end{royalblueblock}
-			\end{column}
-
+        \end{column}
     \end{columns}
 \end{frame}
 
@@ -628,17 +571,15 @@
         \begin{column}{0.48\textwidth}
             \begin{royalblueblock}{Conditional Average Treatment Effect (CATE)}
                 \textbf{CATE:} $\tau(x) = E[Y_i(1) - Y_i(0) \mid X_i = x]$
-
                 \vspace{0.2cm}
 
-                Treatment effect for units with characteristics $x$
-
+                Treatment effect for units with characteristics $x$.
 
                 \textbf{Problem:}
-				\begin{itemize}
-					\item true CATE are not readily observable
-					\item infinitely dimensional (only aggregated measuers)
-				\end{itemize}
+                \begin{itemize}
+                    \item True CATE is not readily observable
+                    \item Infinite-dimensional (only aggregated measures)
+                \end{itemize}
                 \textbf{Solution:} Approximate with low-dimensional projection
             \end{royalblueblock}
 
@@ -647,14 +588,13 @@
             \begin{royalblueblock}{Best Linear Predictor (BLP)}
                 \textbf{Approximate:}
                 \begin{equation*}
-                    \tau(x) \approx \alpha + \beta_1 x_1 + \beta_2 x_2 + \cdots + \beta_p x_p
+                    \tau(x) \approx \alpha + \beta_1 x_1 + \dots + \beta_p x_p
                 \end{equation*}
-				with $\alpha$ ATE and $\beta_j$ how $x_j$ modifis the effect
+                with $\alpha$ as ATE and $\beta_j$ showing how $x_j$ modifies the effect
             \end{royalblueblock}
         \end{column}
 
-\begin{column}{0.48\textwidth}
-            \begin{royalblueblock}{Methodology (DML Procedure)}
+        \begin{column}{0.48\textwidth}
                 \textbf{Step 1: Nuisance Estimation (ML)}
                 \begin{itemize}
                     \item Split sample (Cross-Fitting)
@@ -673,39 +613,16 @@
                 \begin{equation*}
                     \tilde{Y} = \alpha \tilde{D} + \sum \beta_j (\tilde{D} \cdot x_j) + \epsilon
                 \end{equation*}
-            \end{royalblueblock}
         \end{column}
     \end{columns}
 \end{frame}
 
-\section{Research Gap}
-
-%% ----------------------------------------------------------------
-%% APPENDIX & BACKUP
-%% ----------------------------------------------------------------
 \appendix
 \beginbackup
 
-% \begin{frame}[allowframebreaks]{References}
-% 	\begin{thebibliography}{99}
-
-% 		\bibitem{racek2025capturing}
-% 		Racek, D., Thurner, P. W., \& Kauermann, G. (2025). Capturing the Spatio-Temporal Diffusion Effects of Armed Conflict: A Nonparametric Smoothing Approach. \textit{Journal of the Royal Statistical Society: Series A}.
-
-% 		\bibitem{racek2024conflict}
-% 		Racek, D., Thurner, P. W., Davidson, B. I., Zhu, X., \& Kauermann, G. (2024). Conflict Prediction Using Remote Sensing Data: An Application to Syria. \textit{International Journal of Forecasting, 40}(1), 373--391.
-
-% 		\bibitem{fritz2022role}
-% 		Fritz, C., Mehrl, M., Thurner, P. W., \& Kauermann, G. (2022). The Role of Governmental Weapons Procurements in Forecasting Monthly Fatalities in Intrastate Conflicts. \textit{International Interactions, 48}(4), 778--799.
-
-% 		\bibitem{chernozhukov2018double}
-% 		Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., Newey, W., \& Robins, J. (2018). Double/debiased machine learning for treatment and structural parameters. \textit{The Econometrics Journal, 21}(1), C1--C68.
-
-% 		\bibitem{robinson1988root}
-% 		Robinson, P. M. (1988). Root-N-consistent semi-parametric regression. \textit{Econometrica, 56}, 931--954.
-
-% 	\end{thebibliography}
-% \end{frame}
+\begin{frame}[allowframebreaks, noframenumbering]{References}
+    \printbibliography
+\end{frame}
 
 \backupend
 
