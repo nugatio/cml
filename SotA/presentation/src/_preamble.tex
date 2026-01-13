@@ -1,0 +1,64 @@
+%% _preamble.tex
+%% Based on source
+\documentclass{sdqbeamer}
+
+%% ----------------------------------------------------------------
+%% PACKAGES
+%% ----------------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+%% ----------------------------------------------------------------
+%% CODE STYLING
+%% ----------------------------------------------------------------
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{pythonstyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    language=Python
+}
+\lstset{style=pythonstyle}
+
+%% ----------------------------------------------------------------
+%% METADATA & SETUP
+%% ----------------------------------------------------------------
+
+%% Gruppenlogo (Optional)
+\grouplogo{kl.png}
+
+%% Gruppenname
+\groupname{Praxis der Forschung}
+
+%% Titel & Autor
+\title[Double Machine Learning]{Double Machine Learning}
+\subtitle{Praxis der Forschung | Scientific Computing Center (SCC) -- Methods for Big Data}
+\author[Niklas Bitzer]{Niklas Bitzer}
+\date{26.11.2025}
+
+%% ----------------------------------------------------------------
+%% DOCUMENT START
+%% ----------------------------------------------------------------
+\begin{document}

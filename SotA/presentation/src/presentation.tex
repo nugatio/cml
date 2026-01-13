@@ -1,0 +1,450 @@
+%% Beispiel-Präsentation mit LaTeX Beamer im KIT-Design
+%% https://sdq.kastel.kit.edu/wiki/Dokumentvorlagen
+\documentclass{sdqbeamer}
+
+%% ----------------------------------------------------------------
+%% PACKAGES
+%% ----------------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+%% ----------------------------------------------------------------
+%% CODE STYLING
+%% ----------------------------------------------------------------
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{pythonstyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    language=Python
+}
+\lstset{style=pythonstyle}
+
+%% ----------------------------------------------------------------
+%% METADATA & SETUP
+%% ----------------------------------------------------------------
+
+%% Gruppenlogo (Optional)
+\grouplogo{kl.png}
+
+%% Gruppenname
+\groupname{Praxis der Forschung}
+
+%% Titel & Autor
+\title[Double Machine Learning]{Double Machine Learning}
+\subtitle{Praxis der Forschung | Scientific Computing Center (SCC) -- Methods for Big Data}
+\author[Niklas Bitzer]{Niklas Bitzer}
+\date{26.11.2025}
+
+%% ----------------------------------------------------------------
+%% DOCUMENT START
+%% ----------------------------------------------------------------
+\begin{document}
+
+%% 1. TITLE PAGE
+% Using the standard template option 'title green horizontal'
+% If you have a background image, add: picture=path/to/image
+\begin{frame}[title green horizontal, kitlogo=white]
+\titlepage
+\end{frame}
+
+
+%% 2. TABLE OF CONTENTS
+% Using the template option to color the TOC
+\begin{frame}[tableofcontents=green]{Contents}
+	\tableofcontents
+\end{frame}
+
+%% ----------------------------------------------------------------
+%% CONTENT SECTIONS
+%% ----------------------------------------------------------------
+
+\section{Motivation \& Example Model}
+
+\begin{frame}{Causal Machine Learning for Conflict Research}
+	\textbf{Context: Quantitative Conflict Research}
+    \begin{itemize}
+        \item Spatio-temporal data (geolocations, daily events) to monitor conflict.
+        \item \textbf{Forecasting conflict} using Machine Learning (e.g., \textit{Racek et al., 2025}; \textit{Fritz et al., 2022}).
+    \end{itemize}
+
+    \vspace{1em}
+
+    \textbf{Project Goal}
+    \begin{itemize}
+        \item Pure \textit{prediction} to \textbf{causal explanation}.
+        \item Identify the causal impact of interventions (e.g., foreign aid, economic shocks, climate events).
+        \item Utilize high-dimensional data (e.g., remote sensing covariates (\textit{Racek et al., 2024})).
+    \end{itemize}
+
+    \vspace{1em}
+
+    \begin{lightgraybox} % {This Presentations Focus}
+		Theoretical foundation of \textbf{Double/Debiased Machine Learning (DML)} based on \textit{Chernozhukov et al. (2018)}
+        % To handle these high-dimensional confounders, we need robust methods. This presentation covers the theoretical foundation: \textbf{Double Machine Learning (DML)} based on \textit{Chernozhukov et al. (2018)}.
+    \end{lightgraybox}
+\end{frame}
+
+
+\begin{frame}{Partial Linear Regression (PLR)}
+
+    \begin{greenblock}{Partial Linear Regression (Robinson, 1988)}
+        \vspace{-1.0em} % Removes extra top space
+        \begin{alignat*}{2}
+            Y = D\theta_0 + g_0(X) + U &,\qquad & E[U|X,D] &= 0 \\[0.5em]
+            D = m_0(X) + V             &,\qquad & E[V|X]   &= 0
+        \end{alignat*}
+    \end{greenblock}
+
+    \vspace{1em}
+    \begin{itemize}
+        \item $Y$: Outcome
+        \item $D$: Policy/Treatment
+		\item $X$: High-dimensional confounding factors
+        \item $\theta_0$: Low-dimensional \textbf{target parameter}
+		\item $g_0(X), m_0(X)$: Unknown nuisance functions
+        \item $U, V$: Disturbances
+\end{itemize}\end{frame}
+
+\section{Naive Approach}
+\begin{frame}{The Naive ML Approach}
+    \begin{lightgraybox}
+        Construct a ML estimator $D\hat{\theta}_0 + \hat{g}_0(X)$ to learn regression function $D\theta_0 + g_0(X)$.
+    \end{lightgraybox}
+
+    \vspace{1.5em}
+
+    Estimate of $\theta_0$ with learned component $\hat{g}_0$:
+    $$ \hat{\theta}_0 = \left( \frac{1}{n} \sum_{i \in I} D_i^2 \right)^{-1} \frac{1}{n} \sum_{i \in I} D_i (Y_i - \hat{g}_0(X_i)) $$
+
+    \textbf{Problem:} Convergence slower than $\frac{1}{\sqrt{n}}$:
+    $$ \sqrt{n}(\check{\theta}_0 - \theta_0) = a + b + o_P(1) \xrightarrow{p} \infty $$
+    with
+    $$ a = (E[D_i^2])^{-1} \frac{1}{\sqrt{n}} \sum_{i \in I} D_i U_i \qquad b = (E[D_i^2])^{-1} \frac{1}{\sqrt{n}} \sum_{i \in I} m_0(X_i)(g_0(X_i) - \hat{g}_0(X_i)). $$
+
+\end{frame}
+
+\begin{frame}{The Naive ML Approach}
+    \begin{itemize}
+        \item High-dimensional data requiered ML (Random Forest, Lasso)
+        \item Necessity of regularization
+        \item Induces substantive biases and slows down convergence rate
+    \end{itemize}
+
+    \vspace{1em}
+
+    \textbf{$\Rightarrow$ Error in $\hat{g}$ decays slower than $\frac{1}{\sqrt{n}}$}
+
+    \vspace{1em}
+
+    \begin{redblock}{The Bias Problem}
+        Bias in $\hat{\theta}$ depends mostly on the interaction:
+        $$ \sum \underbrace{m_0(X)}_{\text{'Constant' Term}} \times \underbrace{(\hat{g}(X) - g_0(X))}_{\text{Slow Estimation Error}} $$
+
+        \begin{itemize}
+            \item $m_0(X)$ acts like a \textbf{non-zero weight}
+            \item Because $m_0 \neq 0$, the slow error in $\hat{g}$ is not averaged out
+            \item Ultimately biases our estimate
+        \end{itemize}
+    \end{redblock}
+\end{frame}
+
+\section{DML Approach}
+
+\begin{frame}{The DML Solution: Orthogonalization}
+
+    \begin{lightgraybox}
+        Partiall out effect of X from D to obtain orthogonalized regressor $V = D - m_0(X)$
+    \end{lightgraybox}
+    \vspace{1em}
+    \begin{enumerate}
+        \setlength\itemsep{1em} % Adds nice spacing between the numbered steps
+
+        % \makebox aligns the math by forcing the text to be exactly 4.5cm wide
+        \item Predict outcome (Predict $Y$ from $X$)
+        $$\hat{g}(X) = E[Y|X]$$
+
+        \item Predict treatment (Predict $D$ from $X$)
+        $$\hat{m}(X) = E[D|X]$$
+
+        \item Obtain Residuals:
+        $$ \hat{Y}_i = Y_i - \hat{g}(X_i) \quad \text{and} \quad \hat{V}_i = D_i - \hat{m}(X_i) $$
+
+        \item Regress $\hat{Y}$ on $\hat{V}$ to get $\check{\theta}$
+    \end{enumerate}
+
+    % \vspace{1em}
+    % \begin{greenbox}
+    %     \textbf{Result:} Estimator becomes insensitive ("orthogonal") to errors in the ML steps.
+    % \end{greenbox}
+\end{frame}
+
+\begin{frame}{The DML Solution: Orthogonalization}
+    We get the following DML estimator for $\theta_0$:
+    $$ \check{\theta}_0 &= \left( \frac{1}{n} \sum_{i \in I} \hat{V}_i D_i \right)^{-1} \frac{1}{n} \sum_{i \in I} \hat{V}_i (Y_i - \hat{g}_0(X_i)) $$
+
+    Decomposition of the scaled estimation error of $\check{\theta}_0$:
+    $$ \sqrt{n}(\check{\theta}_0 - \theta_0) &= a^* + b^* + o_P(1)$$
+    with
+    \begin{align*}
+        a^* &= (E[V^2])^{-1} \frac{1}{\sqrt{n}} \sum_{i \in I} V_i U_i \rightsquigarrow N(0, \Sigma) \\
+        b^* &= (E[V^2])^{-1} \frac{1}{\sqrt{n}} \sum_{i \in I} (\hat{m}_0(X_i) - m_0(X_i))(\hat{g}_0(X_i) - g_0(X_i))
+    \end{align*}
+\end{frame}
+
+\begin{frame}{The DML Solution: Orthonogonalization}
+    Regularization bias no longer depends on a single estimation error.
+
+    \vspace{0.5em}
+
+    \begin{greenblock}{The Solution to the Bias Problem}
+        Bias in $\check{\theta}$ is mostly determined by the interaction:
+        $$ \sum \underbrace{(\hat{m}(X) - m_0(X))}_{\text{Error in } D} \times \underbrace{(\hat{g}(X) - g_0(X))}_{\text{Error in } Y} $$
+
+        \begin{itemize}
+            \item With $\hat{m}$ and $\hat{g}$ converging slowly (e.g., $n^{-1/4}$), their \textbf{product converges fast} ($n^{-1/2}$)
+            \item Bias vanishes faster than $\frac{1}{\sqrt{n}}$
+            \item $\Rightarrow \sqrt{n}(\check{\theta}_0 - \theta_0) \to N(0, \Sigma)$
+        \end{itemize}
+    \end{greenblock}
+
+\end{frame}
+
+\begin{frame}{Experiment Results: Naive vs. DML}
+    \begin{columns}
+        \column{0.65\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{fig1.pdf}
+
+        \column{0.35\textwidth}
+                \begin{itemize}
+                    \item 500 Simulation runs
+                    \item Random Forest
+                    \item $N = 500$, $p = 20$ vars
+                    \item $\theta_{0} = 0.5$
+                    \item $m_0(X) = X_1 + 0.25 \cdot \sigma(X_3)$
+                    \item $g_0(X) = \sigma(X_1) + 0.25 \cdot X_3$
+                \end{itemize}
+    \end{columns}
+\end{frame}
+
+\section{Sample Splitting}
+
+\begin{frame}{Why Sample Splitting?}
+    Recall the error decomposition for the DML estimator:
+    $$ \sqrt{n}(\check{\theta}_0 - \theta_0) = \underbrace{a^*}_{N(0, \Sigma)} + \underbrace{b^*}_{\text{Regularization Bias}} + \underbrace{c^*}_{\text{Remainder}} $$
+
+    \textbf{The Critical Remainder Term:}
+    $$ c^* = \frac{1}{\sqrt{n}} \sum_{i \in I} V_i (\hat{g}(X_i) - g_0(X_i)) $$
+
+    \vspace{1em}
+
+    \begin{redblock}{The Overfitting Problem}
+        Estimate $\hat{g}$ and $\theta$ on the \textbf{same data}:
+        \begin{itemize}
+            \item $\hat{g}$ is trained on $Y_i$, which contains $V_i \Rightarrow \hat{g}(X_i)$ is correlated with $V_i$
+            \item Even if $\hat{g}$ is a great predictor, correlation prevents $c^*$ from vanishing
+        \end{itemize}
+    \end{redblock}
+\end{frame}
+
+\begin{frame}{Removing Bias via Sample Splitting}
+    \textbf{The Solution:} Train nuisance models ($\hat{g}, \hat{m}$) on auxiliary ($I^c$), estimate $\check{\theta}$ on main ($I$).
+
+    \vspace{1em}
+    \begin{greenblock}{Mathematical Consequence}
+        Conditioning on $I^c$ and with $E[V_i|X_i] = 0$, the remainder term $c^*$ has \textbf{mean zero} and variance of order:
+
+        $$ \frac{1}{n} \sum_{i \in I} (\hat{g}_0(X_i) - g_0(X_i))^2 \xrightarrow{p} 0 $$
+
+        $\Rightarrow$ Term vanishes in probability by \textbf{Chebyshev’s inequality}.
+    \end{greenblock}
+    \vspace{1em}
+    \begin{lightgraybox}
+    To avoid data loss, Cross-Fitting should be used.
+    \end{lightgraybox}
+\end{frame}
+
+\begin{frame}{Experiment Results: Sample Splitting}
+    \vspace{-2em}
+    \centering
+    \includegraphics[width=0.7\linewidth]{fig2.pdf}
+\end{frame}
+
+\section{Generalization}
+
+\begin{frame}{Generalization: Neyman Orthogonality}
+
+    The DML estimator $\check{\theta}_0$ solves the empirical analog:
+    $$ \frac{1}{n} \sum_{i \in I} \psi(W_i; \check{\theta}_0, \hat{\eta}_0) = 0 $$
+
+    \vspace{0.5em}
+
+    \begin{greenblock}{Neyman Orthogonality}
+        Score $\psi$ is Neyman orthogonal if the moment condition is insensitive to local perturbations in the nuisance parameter $\eta$:
+        $$ \partial_{\eta} E[\psi(W; \theta_0, \eta_0)][\eta - \eta_0] = 0 $$
+        \textbf{Result:} We can plug in noisy estimates $\hat{\eta}$ without creating first-order bias.
+    \end{greenblock}
+
+    \vspace{0.5em}
+
+    Previous examples Neyman orthogonal score function:
+    $$ \psi(W; \theta, \eta) = (Y - D\theta - g(X)) (D - m(X)) $$
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}{Conclusion}
+    \begin{itemize}
+        \setlength\itemsep{1em} % Adds nice spacing between the numbered steps
+        \item \textbf{The Challenge:} For high-dimensional conflict data, standard ML leads to \textbf{biased estimates} due to Regularization and Overfitting.
+        \item \textbf{The DML Solution:}
+        \begin{enumerate}
+            \item \textbf{Neyman Orthogonality:} Makes estimator insensitive to errors in nuisance parameters ($\hat{g}, \hat{m}$)
+            \item \textbf{Sample Splitting:} Ensures remainder term vanishes by decoupling model estimation from the noise
+        \end{enumerate}
+    \end{itemize}
+
+    \vspace{1em}
+
+    \begin{greenblock}{Key Takeaway}
+        DML allows us to utilize powerful ML methods (e.g., Random Forests) to control for complex confounders, while recovering a \textbf{$\sqrt{n}$-consistent, asymptotically normal} estimator for the causal effect $\theta_0$.
+    \end{greenblock}
+\end{frame}
+
+% \begin{frame}{The DML Solution: Cross-Fitting}
+%     \begin{columns}
+%         \column{.55\textwidth}
+%         \begin{lstlisting}
+% def _cross_fit(X, y, d, ml_m, ml_g, k):
+%   v_hat = np.zeros_like(d)
+%   u_hat = np.zeros_like(y)m
+
+%   for t, v in KFold(n_splits=k).split(X):
+%     # 1. Train on training set (t)
+%     ml_m.fit(X[t], d[t])
+%     ml_g.fit(X[t], y[t])
+
+%     # 2. Predict on validation set (v)
+%     v_hat[v] = d[v] - ml_m.predict(X[v])
+%     u_hat[v] = y[v] - ml_g.predict(X[v])
+
+%   return v_hat, u_hat
+%         \end{lstlisting}
+
+%         \column{.4\textwidth}
+%         \begin{blueblock}{Why Cross-Fitting?}
+%             If we train and predict on the same data, we get \textbf{Overfitting Bias}.
+
+%             \vspace{0.5em}
+%             Splitting ensures residuals reflect true out-of-sample unpredictability.
+%         \end{blueblock}
+%     \endcolumns}
+% \end{frame}
+
+% \section{Results}
+
+% \begin{frame}[tableofcontents=green]{Agenda}
+%     \tableofcontents[currentsection]
+% \end{frame}
+
+% \begin{frame}{Simulation Results}
+%     \begin{columns}
+%         \column{\kittwocolumns}
+%         \begin{redblock}{Naive Estimator}
+%             Biased. The distribution (Red) is shifted away from the true parameter ($\theta=0.5$).
+%         \end{redblock}
+
+%         \column{\kittwocolumns}
+%         \begin{blueblock}{DML Estimator}
+%             Unbiased. The distribution (Blue) centers on the true parameter.
+%         \end{blueblock}
+%     \end{columns}
+
+%     \vspace{1em}
+%     \centering
+%     % Placeholder for your figure.
+%     \IfFileExists{fig.pdf}{
+%         \includegraphics[width=0.85\linewidth, height=0.5\textheight, keepaspectratio]{fig.pdf}
+%     }{
+%         \begin{graybox}
+%             \centering \vspace{1cm} [Please ensure fig.pdf is in the directory] \vspace{1cm}
+%         \end{graybox}
+%     }
+% \end{frame}
+
+% \section{Conclusion}
+
+% \begin{frame}[tableofcontents=green]{Agenda}
+%     \tableofcontents[currentsection]
+% \end{frame}
+
+% \begin{frame}{Conclusion}
+%     \begin{itemize}
+%         \item \textbf{Causal Inference $\neq$ Prediction:} High accuracy ($R^2$) does not guarantee valid causal estimates.
+%         \item \textbf{Naive Approaches Fail:} Regularization bias destroys inference in high-dimensional settings.
+%         \item \textbf{Double Machine Learning Works:}
+%         \begin{enumerate}
+%             \item \textbf{Orthogonalization:} Removes regularization bias.
+%             \item \textbf{Cross-Fitting:} Removes overfitting bias.
+%         \end{enumerate}
+%     \end{itemize}
+
+%     \vspace{2em}
+%     \begin{contentblock}{}
+%         \centering \Large \textbf{Thank you!}
+%     \end{contentblock}
+% \end{frame}
+
+%% ----------------------------------------------------------------
+%% APPENDIX & BACKUP
+%% ----------------------------------------------------------------
+\appendix
+\beginbackup
+
+\begin{frame}[allowframebreaks]{References}
+    \begin{thebibliography}{99}
+
+    \bibitem{racek2025capturing}
+    Racek, D., Thurner, P. W., \& Kauermann, G. (2025). Capturing the Spatio-Temporal Diffusion Effects of Armed Conflict: A Nonparametric Smoothing Approach. \textit{Journal of the Royal Statistical Society: Series A}.
+
+    \bibitem{racek2024conflict}
+    Racek, D., Thurner, P. W., Davidson, B. I., Zhu, X., \& Kauermann, G. (2024). Conflict Prediction Using Remote Sensing Data: An Application to Syria. \textit{International Journal of Forecasting, 40}(1), 373--391.
+
+    \bibitem{fritz2022role}
+    Fritz, C., Mehrl, M., Thurner, P. W., \& Kauermann, G. (2022). The Role of Governmental Weapons Procurements in Forecasting Monthly Fatalities in Intrastate Conflicts. \textit{International Interactions, 48}(4), 778--799.
+
+    \bibitem{chernozhukov2018double}
+    Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., Newey, W., \& Robins, J. (2018). Double/debiased machine learning for treatment and structural parameters. \textit{The Econometrics Journal, 21}(1), C1--C68.
+
+    \bibitem{robinson1988root}
+    Robinson, P. M. (1988). Root-N-consistent semi-parametric regression. \textit{Econometrica, 56}, 931--954.
+
+    \end{thebibliography}
+\end{frame}
+
+\backupend
+
+\end{document}
