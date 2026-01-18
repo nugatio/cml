@@ -2406,7 +2406,20 @@
     <bcf:citekey order="31" intorder="1">pollmann_causal_2023</bcf:citekey>
     <bcf:citekey order="32" intorder="1">racek_capturing_2025</bcf:citekey>
     <bcf:citekey order="33" intorder="1">papadogeorgou_causal_2022</bcf:citekey>
-    <bcf:citekey order="34" intorder="1">chiang_multiway_2022</bcf:citekey>
+    <bcf:citekey order="34" intorder="1">ali_tutorial_2024</bcf:citekey>
+    <bcf:citekey order="34" intorder="2">reich_review_2021</bcf:citekey>
+    <bcf:citekey order="35" intorder="1">dorazio_modeling_2019</bcf:citekey>
+    <bcf:citekey order="36" intorder="1">obukhov_identifying_2023</bcf:citekey>
+    <bcf:citekey order="37" intorder="1">clarke_double_2025</bcf:citekey>
+    <bcf:citekey order="38" intorder="1">conley_standard_2025</bcf:citekey>
+    <bcf:citekey order="39" intorder="1">semenova_inference_2023</bcf:citekey>
+    <bcf:citekey order="40" intorder="1">chernozhukov_doubledebiased_2018</bcf:citekey>
+    <bcf:citekey order="41" intorder="1">semenova_inference_2023</bcf:citekey>
+    <bcf:citekey order="42" intorder="1">clarke_double_2025</bcf:citekey>
+    <bcf:citekey order="43" intorder="1">chiang_multiway_2022</bcf:citekey>
+    <bcf:citekey order="44" intorder="1">lewis_doubledebiased_2021</bcf:citekey>
+    <bcf:citekey order="45" intorder="1">chernozhukov_generic_2025</bcf:citekey>
+    <bcf:citekey order="45" intorder="2">semenova_debiased_2021</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

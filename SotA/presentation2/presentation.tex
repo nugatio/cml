@@ -30,7 +30,7 @@
 
 %% Title & Author
 \title[Double Machine Learning for Spatio-Temporal Conflict Data]{Double Machine Learning for Spatio-Temporal Conflict Data}
-\subtitle{State-of-the-Art Report | Scientific Computing Center (SCC) -- Methods for Big Data}
+\subtitle{State-of-the-Art Presentation | Scientific Computing Center (SCC) -- Methods for Big Data}
 \author[Niklas Bitzer]{Niklas Bitzer}
 \date{14.01.2026}
 
@@ -144,7 +144,6 @@
         \begin{redblock}{2. Dimensionality}
             \textbf{High-Dimensional Setting \cite{hegre_introducing_2020}}
             \begin{itemize}
-                \item Covariates $\gg$ Observations
                 \item Hundreds of confounders
                 \item Traditional methods fail
                 \item \textbf{Need}: Regularization (Lasso, RF)
@@ -321,11 +320,11 @@
         \end{itemize}
         \vspace*{0.5em}
         \textbf{The Assumption:} Unconfoundedness (Ignorability)
-        \begin{redblock}{Fails for Spatial Data}
+        \begin{redblock}{Fails for Spatial Data \cite{ali_tutorial_2024, reich_review_2021}}
             \textbf{Spatial Confounding:} Unmeasured variables $U$ with spatial structure affect both treatment and outcome.
             \begin{itemize}
                 \item Conflict drivers are not randomly distributed
-                \item \textbf{Latent Variables ($U_i$):} Governance, terrain, ethnic tensions, culture
+                \item \textbf{Latent Variables ($U_i$):} Governance \cite{dorazio_modeling_2019}, terrain \cite{obukhov_identifying_2023}, ethnic tensions, culture
                 \item $\Rightarrow$ Spurious treatment-outcome association
             \end{itemize}
         \end{redblock}
@@ -353,9 +352,9 @@
         \vspace{1.25em}
         \begin{greenblock}{Mitigation Strategies}
             \begin{itemize}
-                \item Spatial Fixed Effects (if static)
-                \item Spatial Basis Functions
-                \item Distance-adjusted matching
+                \item Spatial Fixed Effects (if static) \cite{clarke_double_2025}
+                \item Spatial Basis Functions \cite{conley_standard_2025}
+                \item Geographic Grouping
             \end{itemize}
         \end{greenblock}
     \end{columns}
@@ -366,7 +365,7 @@
     \begin{columns}[T]
         \column{0.48\textwidth}
 
-        \begin{redblock}{i.i.d. Assumption Violated}
+        \begin{redblock}{i.i.d. Assumption Violated \cite{semenova_inference_2023}}
             \textbf{Standard ML \& Inference assume:}
             \begin{equation*}
                 (Y_i, D_i, X_i) \overset{\text{i.i.d.}}{\sim} P
@@ -402,7 +401,7 @@
 
 \section{Double Machine Learning}
 
-\begin{frame}{Double Machine Learning}{The Basics}
+\begin{frame}{Double Machine Learning}{The Basics \cite{chernozhukov_doubledebiased_2018}}
     \begin{columns}[T]
         \begin{column}{0.48\textwidth}
            \textbf{The Problem:}
@@ -414,7 +413,7 @@
            \vspace{0.5cm}
             \begin{greenblock}{Neyman Orthogonality}
                 Score $\psi$ is Neyman orthogonal if the moment condition is insensitive to local perturbations in the nuisance parameter $\eta$:
-                $$ \partial_{\eta} E[\psi(W; \theta_0, \eta_0)][\eta - \eta_0] = 0 $$
+                $$ \partial_{\eta} \mathbb{E}[\psi(W; \theta_0, \eta_0)][\eta - \eta_0] = 0 $$
                 \textbf{Result:} We can plug in noisy estimates $\hat{\eta}$ without creating first-order bias
             \end{greenblock}
         \end{column}
@@ -449,8 +448,9 @@
             \vspace{0.3cm}
             \begin{greenblock}{Solutions}
                 \begin{itemize}
+				\item \textbf{Neighbor Left Out CF:} Leave out neighbors when fitting nuisance components \cite{semenova_inference_2023}
                     \item \textbf{Block Cross-Fitting:}
-                    Split by Time Blocks or Spatial Clusters to preserve dependence structure
+                    Split by Time Blocks or Spatial Clusters to preserve dependence structure \cite{clarke_double_2025}
                     \item \textbf{Multiway Clustering:}
                     Standard errors must be clustered by Grid ID and Time ID \cite{chiang_multiway_2022}
                 \end{itemize}
@@ -515,17 +515,17 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Double Machine Learning}{DML for Dynamic Treatment Effects (Lewis \& Syrgkanis 2021)}
+\begin{frame}{Double Machine Learning}{DML for Dynamic Treatment Effects \cite{lewis_doubledebiased_2021}}
     \begin{columns}[T]
         \begin{column}{0.48\textwidth}
             \textbf{Partially Linear Markovian Model}
             \vspace{0.2cm}
 
-            Treatments over time affect:
+            Treatments over time affect future:
             \begin{itemize}
-                \item Future states (through system dynamics)
-                \item Future treatments (through policy)
-                \item Future outcomes (directly + indirectly)
+                \item states (through system dynamics)
+                \item treatments (through policy)
+                \item outcomes (directly + indirectly)
             \end{itemize}
 
             \vspace{0.2cm}
@@ -545,13 +545,13 @@
 
                 \textbf{1. Residualize outcome}
                 \begin{itemize}
-                    \item Use ML to predict final outcome from state
+                    \item ML to predict final outcome from state
                     \item Compute outcome residuals
                 \end{itemize}
 
                 \textbf{2. Residualize treatments}
                 \begin{itemize}
-                    \item Use ML to predict past treatments from state
+                    \item ML to predict past treatments from state
                     \item Compute treatment residuals
                 \end{itemize}
 
@@ -566,11 +566,11 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Double Machine Learning}{DML for Heterogeneous Treatment Effects}
+\begin{frame}{Double Machine Learning}{DML for Heterogeneous Treatment Effects \cite{chernozhukov_generic_2025, semenova_debiased_2021}}
     \begin{columns}[T]
         \begin{column}{0.48\textwidth}
             \begin{royalblueblock}{Conditional Average Treatment Effect (CATE)}
-                \textbf{CATE:} $\tau(x) = E[Y_i(1) - Y_i(0) \mid X_i = x]$
+                \textbf{CATE:} $\tau(x) = \mathbb{E}[Y_i(1) - Y_i(0) \mid X_i = x]$
                 \vspace{0.2cm}
 
                 Treatment effect for units with characteristics $x$.
@@ -598,8 +598,8 @@
                 \textbf{Step 1: Nuisance Estimation (ML)}
                 \begin{itemize}
                     \item Split sample (Cross-Fitting)
-                    \item Predict outcome $\hat{g}(Z) = E[Y|Z]$
-                    \item Predict treatment $\hat{m}(Z) = E[D|Z]$
+                    \item Predict outcome $\hat{g}(Z) = \mathbb{E}[Y|Z]$
+                    \item Predict treatment $\hat{m}(Z) = \mathbb{E}[D|Z]$
                 \end{itemize}
 
                 \textbf{Step 2: Orthogonalization}

@@ -1,0 +1,76 @@
+\section{Spatio-Temporal Causal Inference}
+% \section{Spatio-Temporal Challenges}
+\label{sec:spatio_temporal}
+Standard causal inference assumptions for independent cross-sectional observations often fail in the context of complex dependencies across space and time.
+Therefore, when working with real-world data to try and inference conflict relations and dynamics, a multitude of problems arises.
+The following section outlines the principal challenges and current state of the art solutions: Interferenc/Persistence (\Cref{subsec:sutva}), Confounding (\Cref{subsec:spatial_dynamic_confounding}), Positivity (\Cref{subsec:positivity}) and Statistical Defendence (\Cref{subsec:statistical_dependence}).
+Conflict data also has some specific challengs related to data quality---such as reporting bias---which will not be discusesed in detail here (for further reading see \cite{weidmann_accuracy_2015, weidmann_closer_2016, gohdes_first_2013})
+
+\subsection{The Stable Unit Treatment Value Assumption}
+\label{subsec:sutva}
+The validity of causal estimation relies on the Stable Unit Treatment Vule Assumption (SUTVA) (\cite{rubin_bayesian_1978}).
+SUTVA requires that there is no interference.
+Formally, the potential outcome $Y_{it}$ of unit $i$ at time $t$ depends only on the specific treatment $D_{it}$ assigned to that unit at that time:
+$Y_{it}=Y_{it}(D_{it})$.
+This assumption as violated by two mechanisms: \textbf{Spatial Spillover} occures when the outcome for unit $i$ depends on the treatment vector of its spatial neighbors $\mathbf{D}_{\mathcal{N},t}$: $Y_{it}=Y_{it}(D_{it},\mathbf{D}_{\mathcal{N},t})$ \cite{sobel_what_2006, hudgens_toward_2008}.
+\textbf{Temporal Carryover} on the other hand arises when the treatment applied at time $t$ continues to influence outcomes at $t+k$, violating the assumption of instantaneous effects \cite{robins_new_1986,blackwell_how_2018}.
+Therefore, an outcome $Y_{it}$ depends on the whole treatment history $\tilde{D}_{it}$: $Y_{it}=Y_{it}(\tilde{D}_{it})$ with $\tilde{D}_{it} = D_{it}, D_{i, t-1}, \dots, D_{i, 0}$.
+
+Since conflict is a dynamic system in the real world, interventions in one region potentially lead to diffusion effects over space and trough time; for instance it may displaces activity to neighboring areas over time \cite{papadogeorgou_causal_2022}.
+There are several approaches to address the violations: \textbf{Geometry-Based} methods use concentric rings or spatial buffers to define mappings that capture a units exposure (or non-exposure) and affect of nearby treatments on outcomes \cite{pollmann_causal_2023, butts_difference--differences_2023}.
+\textbf{Stochastic Interventions/Point Processes} model treatments as probability distributions across space and time by redefining estimands to explicity incorporate interference patterns to allow for unstructured inteference \cite{papadogeorgou_causal_2022, zhou_estimating_2025, mukaigawara_spatiotemporal_2025}.
+\textbf{Network/Dependency Graphs} are often used for non-geographic interference (e.g. supply chanis) and relax SUTVA by allowing interference only between connected nodes \cite{leung_treatment_2020, hays_double_2025}.
+Finally, \textbf{Nonparametric Smoothing} assumes interference follows a contious diffusive function, that then gets modeled using decay basis functions or NNs \cite{racek_capturing_2025, ali_estimating_2024}.
+
+\subsection{Spatial \& Dynamic Confounding}
+\label{subsec:spatial_dynamic_confounding}
+Even if interference is modeled correctly, causal identification also relies on the assumption of Uncofoundedness.
+This requires that the potential outcomes are independent of treatment assignmet $D_{it}$ conditional on observed covariates $X_{it}$: $Y_{it}(d) \perp D_{it} \mid X_{it}$.
+In spatio-temporal settings unobversed heterogenity in both dimension frequently violates this assumption: \textbf{Spatial Confounding} takes place when unobseved variables $U_i$ (e.g., terrain, governance, culture) influence both treatment assignment and outcome while exhibiting spatial correlation \cite{reich_review_2021}.
+So if $D_{it} \leftarrow U_i \rightarrow Y_{it}$ and $U_i$ is spatially clustered (most conflict drivers are not randomly distributed \cite{christiansen_toward_2022, conley_standard_2025}), standard estimators (that assume i.i.d. errors) will produce biased estimates by attributing the effect of the geography to the treatment \cite{gilbert_causal_2024, conley_standard_2025}.
+\textbf{Dynamic Confounding} (also called Time-varying confounding) materializes in the temporal dimension, espicially trough feedback loops where past outcomes influence future treatments ($Y_{i, t-1} \rightarrow D_{it}$) \cite{feuerriegel_causal_2024, blackwell_how_2018}; for instance increased conflict intensity of a previous timeframes outcome ($Y_{i,t-1}$) may influences new interventions ($D_{it}$), which then affects future conflict outcomes ($Y_{i,t+1}$).
+Such a structure violates the strict exogenity assumption because the covariates required to adjust for the confounding (the history) are themseles affected by prior treatments \cite{blackwell_how_2018}.
+Consequently, indetification in this context requires the stronges assumption of sequential ignorablity \cite{robins_association_1999}: Treatment assigenment does not depend on past potential outcomes conditional on the full history of observables \cite{blackwell_how_2018, lewis_doubledebiased_2021, semenova_inference_2023}.
+
+Mitigation strategies in recent literature include: \textbf{Sequential Peeling} is a method to address feedback loops where effects are estimated recursively to isolate the causal effect of the current treatment from future confounders \cite{lewis_doubledebiased_2021, hays_double_2025}.
+Another dynamic decofounding method is to use history-dependent propensity scores to "break" the feelback loop \cite{papadogeorgou_causal_2022, mukaigawara_spatiotemporal_2025}.
+\textbf{Spatial Basis Functions \& Smoothing} model spatial confounding a smooth surface by using flexible funtions---for instance nonparametric smoothing or tensor splines---to absorb trends that would otherwive lead to biased treatment effects \cite{racek_capturing_2025, conley_standard_2025}.
+\textbf{Data Transformations} can be used in the case of static spatial cofounding (fixed factors that do not change over the study period).
+Examples include Difference-in-Difference (DiD) extensions \cite{callaway_difference--differences_2021, dechaisemartin_two-way_2023, gavrilova_difference--difference_2025, yang_stoat_2025} and within-group (WG)/first-differencing (FD) transformations \cite{clarke_double_2025}.
+There are also methods that utilize \textbf{Latent Modeling} and \textbf{Proxy Learning} in cases where confounders are unobserved.
+These techniques use high-dimensional data (or auxiliary variables) to learn a low-dimensional latent representation of the confounders, for instance with an Autoncoder \cite{ali_estimating_2024} or even multimodal \cite{klaassen_doublemldeep_2024, pettersson_debiasing_2025}. See also \cite{christiansen_toward_2022, kaddour_causal_2022, semenova_inference_2023, pollmann_causal_2023}.
+
+\subsection{Positivity}
+\label{subsec:positivity}
+Another causal identification requirement is the Positivity (or Overlap) assumption, which conditions that treatment assignment is not deterministic given the covariates \cite{rosenbaum_central_1983}.
+This implies that every unit must have a non-zero probability of receiving the treatment; formally, the propensity scores must be strictly bounded away from zero and one:
+$$0 < \epsilon < P(D_{it}=1 \mid X_{it}) < 1 - \epsilon \quad \forall X_{it} \in \mathcal{X}$$
+For continuous treatments, positivity requires sufficient variation in the treatment intensity conditional on controls \cite{colangelo_double_2025, chernozhukov_doubledebiased_2018}.
+In conflict research, this is often violated by structural zeros or ones (e.g., some regions may have a near zero probability of conflict no matter the covariates), often caused by strategic targeting that leave no comparable counterfactual units (a structural violation) \cite{kuzmanovic_causal_2024}.
+Furthermore, in high-dimensional settings and when treatments are continous this can lead to issues since the overlap deteriorates asymptotically; as the dimension of $X_{it}$ increases, units become unique and propensity scores collapse to the boundaries (a practical violation) \cite{damour_overlap_2021, colangelo_double_2025, petersen_diagnosing_2012}.
+These violations result in the inverse probability weights explonig, inflating variance and introducing bias.
+
+To restore identification, state-of-the-art methods employ \textbf{Trimming} strategies to discard extreme observations \cite{crump_dealing_2009} or \textbf{Shift Interventions} that define effects based on local perturbations rather than global changes \cite{kennedy_towards_2023}.
+
+state-of-the-art solutions therefore employ \textbf{Trimming} to define a feasible sub-population \cite{crump_dealing_2009} or \textbf{Overlap Weighting} to focus inference on units with clinical equipoise \cite{li_addressing_2018}.
+
+To restore identification, state-of-the-art approaches employ \textbf{Trimming} to define a feasible estimation sub-population \cite{crump_dealing_2009, chernozhukov_doubledebiased_2018} or \textbf{Overlap Weighting} to continuously down-weight units with poor empirical support \cite{li_addressing_2018}.
+
+Solutions include \textbf{Propensity Score Trimming}, which restricts inference to subpopulations with adequate overlap \cite{crump_dealing_2009}, and \textbf{Overlap Weights} that reweight toward units where treatment assignment is most uncertain \cite{li_balancing_2018}.
+For continuous treatments (e.g., conflict intensity), \textbf{Shift Interventions} estimate effects of small perturbations $\delta$ rather than the full dose-response curve, requiring only local positivity \cite{kennedy_towards_2023, colangelo_double_2025}.
+
+To define a feasible estimation sample, state-of-the-art solutions employ \textbf{Trimming} strategies to discard observations with extreme propensity scores \cite{crump_dealing_2009}
+, or \textbf{Overlap Weighting} to down-weight units with low probability of belonging to the opposing group  \cite{li_addressing_2018}.
+
+Standard mitigation involves \textit{strict trimming} of the sample to exclude units with propensity scores outside the $[\epsilon, 1-\epsilon]$ interval  \cite{crump_dealing_2009}
+ or restricting the estimand to the Average Treatment Effect on the Treated (ATT) to focus solely on the sub-population where conflict is plausible.
+
+Several strategies address positivity violations.
+\textbf{Propensity Score Trimming} excludes units with extreme propensity scores (typically $e(X) < \alpha$ or $e(X) > 1-\alpha$), restricting inference to a subpopulation with adequate overlap \cite{crump_dealing_2009}.
+\textbf{Overlap Weights} redefine the target estimand to focus on the population with clinical equipoise, weighting by $e(X)(1-e(X))$ to emphasize units where treatment assignment is most uncertain \cite{li_balancing_2018}.
+\textbf{Continuous Treatment Formulations} avoid the binary treatment framework entirely, modeling treatment intensity directly and requiring only that the conditional treatment density is bounded away from zero \cite{colangelo_double_2025}.
+Finally, \textbf{Shift Interventions} estimate the effect of small perturbations $\delta$ to treatment rather than the full dose-response curve, requiring only that $P(D_{it} + \delta \mid X_{it}) > 0$ when $P(D_{it} \mid X_{it}) > 0$---a weaker assumption often more plausible in practice \cite{kennedy_towards_2023}.
+
+\subsection{Statistical Dependence}
+\label{subsec:statistical_dependence}
+Besides the above mentioned identification assumptions there is also a estimation assumption that should be mentined here
