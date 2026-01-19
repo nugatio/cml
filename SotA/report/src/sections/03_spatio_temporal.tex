@@ -42,35 +42,24 @@ These techniques use high-dimensional data (or auxiliary variables) to learn a l
 
 \subsection{Positivity}
 \label{subsec:positivity}
-Another causal identification requirement is the Positivity (or Overlap) assumption, which conditions that treatment assignment is not deterministic given the covariates \cite{rosenbaum_central_1983}.
-This implies that every unit must have a non-zero probability of receiving the treatment; formally, the propensity scores must be strictly bounded away from zero and one:
-$$0 < \epsilon < P(D_{it}=1 \mid X_{it}) < 1 - \epsilon \quad \forall X_{it} \in \mathcal{X}$$
+Another causal identification requirement is the Positivity (also sometimes called Overlap) assumption, which conditions that treatment assignment is not deterministic given the covariates \cite{rosenbaum_central_1983}.
+This implies that every unit must have a non-zero probability of receiving the treatment; formally, the propensity scores must be strictly bounded away from zero and one: $0 < \epsilon < P(D_{it}=1 \mid X_{it}) < 1 - \epsilon \quad \forall X_{it} \in \mathcal{X}$.
 For continuous treatments, positivity requires sufficient variation in the treatment intensity conditional on controls \cite{colangelo_double_2025, chernozhukov_doubledebiased_2018}.
 In conflict research, this is often violated by structural zeros or ones (e.g., some regions may have a near zero probability of conflict no matter the covariates), often caused by strategic targeting that leave no comparable counterfactual units (a structural violation) \cite{kuzmanovic_causal_2024}.
 Furthermore, in high-dimensional settings and when treatments are continous this can lead to issues since the overlap deteriorates asymptotically; as the dimension of $X_{it}$ increases, units become unique and propensity scores collapse to the boundaries (a practical violation) \cite{damour_overlap_2021, colangelo_double_2025, petersen_diagnosing_2012}.
 These violations result in the inverse probability weights explonig, inflating variance and introducing bias.
-
-To restore identification, state-of-the-art methods employ \textbf{Trimming} strategies to discard extreme observations \cite{crump_dealing_2009} or \textbf{Shift Interventions} that define effects based on local perturbations rather than global changes \cite{kennedy_towards_2023}.
-
-state-of-the-art solutions therefore employ \textbf{Trimming} to define a feasible sub-population \cite{crump_dealing_2009} or \textbf{Overlap Weighting} to focus inference on units with clinical equipoise \cite{li_addressing_2018}.
-
-To restore identification, state-of-the-art approaches employ \textbf{Trimming} to define a feasible estimation sub-population \cite{crump_dealing_2009, chernozhukov_doubledebiased_2018} or \textbf{Overlap Weighting} to continuously down-weight units with poor empirical support \cite{li_addressing_2018}.
-
-Solutions include \textbf{Propensity Score Trimming}, which restricts inference to subpopulations with adequate overlap \cite{crump_dealing_2009}, and \textbf{Overlap Weights} that reweight toward units where treatment assignment is most uncertain \cite{li_balancing_2018}.
-For continuous treatments (e.g., conflict intensity), \textbf{Shift Interventions} estimate effects of small perturbations $\delta$ rather than the full dose-response curve, requiring only local positivity \cite{kennedy_towards_2023, colangelo_double_2025}.
-
-To define a feasible estimation sample, state-of-the-art solutions employ \textbf{Trimming} strategies to discard observations with extreme propensity scores \cite{crump_dealing_2009}
-, or \textbf{Overlap Weighting} to down-weight units with low probability of belonging to the opposing group  \cite{li_addressing_2018}.
-
-Standard mitigation involves \textit{strict trimming} of the sample to exclude units with propensity scores outside the $[\epsilon, 1-\epsilon]$ interval  \cite{crump_dealing_2009}
- or restricting the estimand to the Average Treatment Effect on the Treated (ATT) to focus solely on the sub-population where conflict is plausible.
-
-Several strategies address positivity violations.
-\textbf{Propensity Score Trimming} excludes units with extreme propensity scores (typically $e(X) < \alpha$ or $e(X) > 1-\alpha$), restricting inference to a subpopulation with adequate overlap \cite{crump_dealing_2009}.
-\textbf{Overlap Weights} redefine the target estimand to focus on the population with clinical equipoise, weighting by $e(X)(1-e(X))$ to emphasize units where treatment assignment is most uncertain \cite{li_balancing_2018}.
-\textbf{Continuous Treatment Formulations} avoid the binary treatment framework entirely, modeling treatment intensity directly and requiring only that the conditional treatment density is bounded away from zero \cite{colangelo_double_2025}.
-Finally, \textbf{Shift Interventions} estimate the effect of small perturbations $\delta$ to treatment rather than the full dose-response curve, requiring only that $P(D_{it} + \delta \mid X_{it}) > 0$ when $P(D_{it} \mid X_{it}) > 0$---a weaker assumption often more plausible in practice \cite{kennedy_towards_2023}.
+Solutions include \textbf{Trimming} the sample based on the propensity score to discard extreme observations and restrict inference on subsamples with enugh overlap \cite{crump_dealing_2009}; \textbf{Overlap Weights} to continuously down-weight units in the tails of the provensity score distribution \cite{li_addressing_2019}; and \textbf{Shift Interventions} that estimate the effect of small perturbations to the treatment \cite{colangelo_double_2025, kennedy_towards_2023}.
+The first to are best for binary treatments whereas the shift interventions are for continous treatments.
 
 \subsection{Statistical Dependence}
 \label{subsec:statistical_dependence}
-Besides the above mentioned identification assumptions there is also a estimation assumption that should be mentined here
+Besides the above mentioned general identification assumptions for causal inference there are also estimation/inference assumptions.
+Conflict data violates the i.i.d. assumption since it exhibits strong autocorrelation \cite{racek_capturing_2025, schutte_diffusion_2011, buhaug_contagion_2008}---spatio-temporal dependencies where error terms are correlated across units---that leads to two distinct issues:
+(1) Inference failure, where standard variance estimators underestimante uncertainty and standard errors are to small; resulting in Type-I errors and spurious significance \cite{conley_standard_2025, conley_gmm_1999}.
+(2) Data leakage when utilizing random cross-validation splits and when traning units that are spatio-temporally close to test units.
+This is particularily relevant for DML, since the framework relies on the regularity condition of i.i.d. observations and uses cross-fitting to get valid standard errors and convergence rates (See \cref{sec:dml} for further details) \cite{chernozhukov_doubledebiased_2018, chiang_multiway_2022}.
+Recent research addresses this issue via \textbf{Block Cross-Fitting}, which spilts data by time periods or spatial clusters rather than randomly and per unit to preserve the dependence structure within folds \cite{clarke_double_2025}.
+\textbf{Neighbor-Left-Out Cross-Fitting} builds on this by excluding neighboring observations, therefore preventing information leakage from spatially or temporally adjacent units \cite{semenova_inference_2023}.
+The method is specifically desinged for time-series and spatially dependent data where dependence decays over time and distance.
+Another related approach is \textbf{Multiway Cross-Fitting}, which accounts for correlation along multiple dimensions simultaneously (e.g., clustering by both time period and spatial unit in panel data) \cite{chiang_multiway_2022}.
+Additionally, inference should use \textbf{HAC Estimators} (Heteroskedasticity and Autocorrelation Consistent) to address issue (1) and correctly quantify uncertainty in the presence of spatial and temporal correlation \cite{conley_gmm_1999, kelejian_hac_2007, cameron_robust_2011, chiang_multiway_2022}.

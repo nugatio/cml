@@ -1,2 +1,46 @@
 \section{Double Machine Learning}
 \label{sec:dml}
+
+\subsection{The Basics}
+The high-dimensional setting of conflict data where the number of potential confounders is large relative to the numbre of observations necessitates the usage of ML methods.
+While standard ML methods achive strong predictive performance trough regularization, the latter also introduces systematic bias in treatment effect estimates that do not vanish with increasing sample size.
+Double Machine Learning---formally introduced by \textcite{chernozhukov_doubledebiased_2018} in 2018---revolves the regularization bias problem and allows for valid causal inference combined with flexible ML methods.
+
+%\paragraph*{The Partially Linear Regression}
+To illustrate the concept of DML, consider the following Partially Linear Regression (PLR) model \cite{robinson_root-n-consistent_1988}:
+\begin{alignat*}{2}
+Y &= D\theta_0 + g_0(X) + U, \quad &\hspace{\fill} \mathbb{E}[U|X,D] &= 0 \\
+D &= m_0(X) + V, &\hspace{\fill} \mathbb{E}[V|X] &= 0
+\end{alignat*}
+where $Y$ denotes the outcome (e.g., conflict fatalities), $D$ the treatment (e.g., military intervention, aid allocation), $U$ and $V$ disturbances, and $X \in \mathbb{R}^p$ a high-dimensional vector of confounders (e.g., GDP, population density, conflict event data).
+$\theta_0$ is the causal parameter of interes that captures the causal effect of $D$ on $Y$, while the nuisance functions $g_0(X)$ and $m_0(X) = \mathbb{E}[D|X]$ (the propensity score) are unknown and potentially complex.
+The challenge lies in making a valid estimation of $\theta_0$ despite the high dimensionality of the nuisance functions $\eta_0 = (g_0, m_0)$.
+
+Simply using a flexible ML algorithm like random forest to estimate $\theta_0$ by (1) estimating $g_0$ and (2) regressing the residuals $Y - \hat{g}(X)$ on $D$ leads to biased results.
+Modern ML methods rely on regularization to manage high-dimensional data, which introduces regularization bias; the estimation error $\hat{g}(X) - g_0(X)$ remains correlated with $D$ through their mutual dependence on $X$.
+This bias propagates directly into $\hat{\theta}$, does not vanish at rate $1/\sqrt{n}$, and invalidates standard inference.
+
+DML resolves this by employing Neyman Orthogonality and constructing an orthogonal score that is insensitive to first-order errors in nuisance estimation.
+In addition to partialling out $X$ from $Y$, DML additionally residualizes the treatment.
+This isolates the variation in $D$ and $Y$ that is not explained by $X$ by estimating the nuisance functions $\hat{g}(X)$ and $\hat{m}(X)$ to create residuals $\tilde{Y} = Y - \hat{g}(X)$ and $\tilde{D} = D - \hat{m}(X)$.
+Formally, this estimator depends on a score function $\psi(W; \theta, \eta)$ that is insensitive to small perturbations in the nuisance parameters $\eta$.
+In the PLR example, the orthogonal score function takes the form:
+\begin{equation*}
+    \psi(W; \theta, \eta) = (Y - g(X) - D\theta)(D - m(X))
+\end{equation*}
+where $W = (Y, D, X)$ and $\eta = (m, g)$. This satisfies the Neyman orthogonality condition:
+\begin{equation*}
+\partial_\eta \mathbb{E}[\psi(W; \theta_0, \eta_0)][\eta - \eta_0] = 0
+\end{equation*}
+This condition ensures that first-order errors in estimating $\hat{g}$ and $\hat{m}$ vanish, leaving only second-order errors that do not affect the asymptotic distribution of $\hat{\theta}$.
+
+To prevent overfitting, DML utilizes Cross-Fitting: (1) the sample is randomly partitioned into $K$ folds; (2) the nuisance functions are estimated on the remaining $K-1$ folds; (3) the orthogonal score is evaluated on the held-out fold; (4) the results are either averaged across folds (DML1) or pooled into a single estimating equation solved over all observations (DML2).
+Under regularity conditions, this separation guarantees that the final DML estimator is $\sqrt{n}$-consistent and asymptotically normal:
+\begin{equation*}
+    \sqrt{n}(\hat{\theta} - \theta_0) \xrightarrow{d} \mathcal{N}(0, \sigma^2)
+\end{equation*}
+provided that the nuisance estimators converge at a rate of $n^{-1/4}$ or faster.
+
+\subsection{DML for Dynamic Treatment Effects}
+
+\subsection{DML for Heterogenous Treatment Effects}
