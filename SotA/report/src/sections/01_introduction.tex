@@ -1,8 +1,8 @@
 \section{Introduction}
 \label{sec:intro}
 
-Availability of high-dimensional, fine-grained spatio-temporal data through remote sensing \cite{racek_conflict_2024, mhanna_using_2023, mueller_monitoring_2021} and the emergence of new conflict event databases \cite{hegre_introducing_2020} have transformed conflict research in recent years \cite{croicu_forecasting_2025}.
-Additionally, advancements in machine learning (ML) have led to substantive success in forecasting the timing, location, and fatalities of conflict \cite{racek_capturing_2025, hegre_202324_2025, fritz_role_2022}.
+The availability of high-dimensional, fine-grained spatio-temporal data through remote sensing \cite{racek_conflict_2024, mhanna_using_2023, mueller_monitoring_2021} and the emergence of new conflict event databases \cite{hegre_introducing_2020} have transformed conflict research in recent years \cite{croicu_forecasting_2025}.
+Additionally, advancements in machine learning (ML) have led to substantial success in forecasting the timing, location, and fatalities of conflict \cite{racek_capturing_2025, hegre_202324_2025, fritz_role_2022}.
 For policymakers and humanitarian organizations seeking to prevent conflict, allocate aid, or guide post-conflict recovery, simply anticipating where and when conflict will occur is insufficient;
 they also need to understand the underlying causal relations \cite{kuzmanovic_causal_2024, chadefaux_conflict_2017}.
 This necessitates moving from pure forecasting to causal inference, enabling the determination of the causal impact of specific interventions (e.g., foreign aid allocation \cite{nunn_us_2014, nielsen_foreign_2011, kuzmanovic_causal_2024} or military actions \cite{papadogeorgou_causal_2022, mukaigawara_spatiotemporal_2025}) and external shocks (e.g., economic shocks \cite{miguel_economic_2004}).
@@ -12,17 +12,17 @@ Progressing from prediction to explanation remains a key challenge \cite{feuerri
 The high dimensionality of conflict data typically arises from the use of fine-grained spatial grid cells with monthly observations \cite{hegre_202324_2025, racek_capturing_2025, ge_modelling_2022}.
 For instance, \textcite{racek_capturing_2025} employed 10,640 grid cells ($0.5^\circ \times 0.5^\circ$ lattice) covering Africa with monthly data from 2000 to 2020.
 As a result, traditional parametric approaches often fail in these settings due to the large number of potential confounders and the curse of dimensionality \cite{belloni_high-dimensional_2014}.
-While standard non-parametric ML methods (e.g., Random Forests, Gradient Boosting) can effectively navigate this complexity to optimize predictive performance, they fail to provide valid causal inference due to the inherent introduction of regularization bias \cite{chernozhukov_doubledebiased_2018, athey_machine_2019}.
+While standard nonparametric ML methods (e.g., Random Forests, Gradient Boosting) can effectively navigate this complexity to optimize predictive performance, they fail to provide valid causal inference due to the inherent introduction of regularization bias \cite{chernozhukov_doubledebiased_2018, athey_machine_2019}.
 Double Machine Learning (DML) offers a solution to these fundamental limitations by orthogonalizing the estimation problem and separating the prediction of nuisance functions from the estimation of causal parameters \cite{chernozhukov_doubledebiased_2018}.
-Consequently, one can retain the flexibility of modern ML methods to adequately adjust for observed confounding variables while obtaining unbiased estimates of treatment effects, making it highly suited for causal inference tasks with high-dimensional data \cite{chernozhukov_applied_2024, kaddour_causal_2022}.
+Consequently, one can retain the flexibility of modern ML methods to adequately adjust for observed confounding variables while obtaining unbiased estimates of treatment effects, making the framework highly suited for causal inference tasks with high-dimensional data \cite{chernozhukov_applied_2024, kaddour_causal_2022}.
 
 However, the diffusion of conflict through spatial (spillover) and temporal (carryover) dimensions complicates the application of causal inference \cite{papadogeorgou_causal_2022, mukaigawara_spatiotemporal_2025}.
 For instance, violence in one location increases the likelihood of subsequent violence in adjacent areas, while past conflict often predicts future conflict in the same location \cite{racek_capturing_2025}.
 These dynamics violate the Stable Unit Treatment Value Assumption (SUTVA), as a treatment applied to one unit may affect outcomes in neighboring units and future time periods \cite{pollmann_causal_2023, papadogeorgou_causal_2022}.
-The standard assumption that observations are independent and identically distributed is also fundamentally violated by conflict data \cite{schutte_diffusion_2011, buhaug_contagion_2008}.
+The standard assumption that observations are independent and identically distributed (i.i.d.) is also fundamentally violated by conflict data \cite{schutte_diffusion_2011, buhaug_contagion_2008}.
 Furthermore, unobserved spatially correlated confounders and temporal dependence structures can bias treatment effect estimates and invalidate standard inference procedures \cite{reich_review_2021, mulomba_applying_2025, fink_double_2023}.
 To ensure accurate estimation, causal frameworks must be adapted to explicitly model and account for these challenges.
 
-This report reviews the methodological foundations and the current state of the art for applying Causal Machine Learning (CML), specifically Double Machine Learning, to spatio-temporal data in the context of conflict research.
+This report reviews the methodological foundations and the current state of the art for applying Causal Machine Learning (CML), specifically DML, to spatio-temporal data in the context of conflict research.
 \Cref{sec:forecasting_to_causal_inference} covers current conflict forecasting literature and motivates the shift towards causal inference.
 \Cref{sec:spatio_temporal} discusses the challenges and solutions regarding spatial and temporal data, followed by an outline of the theoretical foundations of DML and extensions in \cref{sec:dml}.

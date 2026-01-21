@@ -4,7 +4,7 @@
 Standard causal inference assumptions for independent cross-sectional observations often fail in the context of complex dependencies across space and time.
 Therefore, when working with real-world data to attempt to infer conflict relations and dynamics, a multitude of problems arises \cite{racek_capturing_2025, schutte_diffusion_2011}.
 The following section outlines the principal challenges and current state-of-the-art solutions: Interference/Persistence (\Cref{subsec:sutva}), Confounding (\Cref{subsec:spatial_dynamic_confounding}), Positivity (\Cref{subsec:positivity}), and Statistical Dependence (\Cref{subsec:statistical_dependence}).
-Conflict data also has some specific challenges related to data quality---such as reporting bias---which will not be discussed in detail here (for further reading see \cite{weidmann_accuracy_2015, weidmann_closer_2016, gohdes_first_2013}).
+Conflict data also has some specific challenges related to data quality---such as reporting bias---which will not be discussed in detail here (for further reading, see \cite{weidmann_accuracy_2015, weidmann_closer_2016, gohdes_first_2013}).
 
 \subsection{The Stable Unit Treatment Value Assumption}
 \label{subsec:sutva}
@@ -14,14 +14,14 @@ Formally, the potential outcome $Y_{it}$ of unit $i$ at time $t$ depends only on
 $Y_{it}=Y_{it}(D_{it})$.
 This assumption is violated by two mechanisms: \textbf{Spatial Spillover} occurs when the outcome for unit $i$ depends on the treatment vector of its spatial neighbors $\mathbf{D}_{\mathcal{N},t}$: $Y_{it}=Y_{it}(D_{it},\mathbf{D}_{\mathcal{N},t})$ \cite{sobel_what_2006, hudgens_toward_2008}.
 \textbf{Temporal Carryover}, on the other hand, arises when the treatment applied at time $t$ continues to influence outcomes at $t+k$, violating the assumption of instantaneous effects \cite{robins_new_1986, blackwell_how_2018}.
-Therefore, an outcome $Y_{it}$ depends on the whole treatment history $\tilde{D}_{it}$: $Y_{it}=Y_{it}(\tilde{D}_{it})$ with $\tilde{D}_{it} = D_{it}, D_{i, t-1}, \dots, D_{i, 0}$.
+Therefore, an outcome $Y_{it}$ depends on the whole treatment history $\tilde{D}_{it}$: $Y_{it}=Y_{it}(\tilde{D}_{it})$ with $\tilde{D}_{it} = \{D_{it}, D_{i, t-1}, \dots, D_{i, 0}\}$.
 
 Since conflict is a dynamic system in the real world, interventions in one region potentially lead to diffusion effects over space and through time;
-for instance, it may displace activity to neighboring areas over time \cite{papadogeorgou_causal_2022}.
-There are several approaches to address the violations: \textbf{Geometry-Based} methods use concentric rings or spatial buffers to define mappings that capture a unit's exposure (or non-exposure) and the effect of nearby treatments on outcomes \cite{pollmann_causal_2023, butts_difference--differences_2023}.
+for instance, violence may displace activity to neighboring areas over time \cite{papadogeorgou_causal_2022}.
+There are several approaches to address these violations: \textbf{Geometry-Based} methods use concentric rings or spatial buffers to define mappings that capture a unit's exposure (or non-exposure) and the effect of nearby treatments on outcomes \cite{pollmann_causal_2023, butts_difference--differences_2023}.
 \textbf{Stochastic Interventions/Point Processes} model treatments as probability distributions across space and time by redefining estimands to explicitly incorporate interference patterns to allow for unstructured interference \cite{papadogeorgou_causal_2022, zhou_estimating_2025, mukaigawara_spatiotemporal_2025}.
 \textbf{Network/Dependency Graphs} are often used for non-geographic interference (e.g., supply chains) and relax SUTVA by allowing interference only between connected nodes \cite{leung_treatment_2020, hays_double_2025}.
-Finally, \textbf{Nonparametric Smoothing} assumes interference follows a continuous diffusive function that gets modeled using decay basis functions or Neural Networks \cite{racek_capturing_2025, ali_estimating_2024}.
+Finally, \textbf{Nonparametric Smoothing} assumes interference follows a continuous diffusive function that is modeled using decay basis functions or neural networks \cite{racek_capturing_2025, ali_estimating_2024}.
 
 \subsection{Spatial \& Dynamic Confounding}
 \label{subsec:spatial_dynamic_confounding}
@@ -29,18 +29,18 @@ Even if interference is modeled correctly, causal identification also relies on 
 This requires that the potential outcomes are independent of treatment assignment $D_{it}$ conditional on observed covariates $X_{it}$: $Y_{it}(d) \perp D_{it} \mid X_{it}$.
 In spatio-temporal settings, unobserved heterogeneity in both dimensions frequently violates this assumption: \textbf{Spatial Confounding} takes place when unobserved variables $U_i$ (e.g., terrain, governance, culture) influence both treatment assignment and outcome while exhibiting spatial correlation \cite{reich_review_2021}.
 So if $D_{it} \leftarrow U_i \rightarrow Y_{it}$ and $U_i$ is spatially clustered (most conflict drivers are not randomly distributed \cite{christiansen_toward_2022, conley_standard_2025}), standard estimators (that assume i.i.d. errors) will produce biased estimates by attributing the effect of the geography to the treatment \cite{gilbert_causal_2024, conley_standard_2025}.
-\textbf{Dynamic Confounding} (also called Time-varying confounding) materializes in the temporal dimension, especially through feedback loops where past outcomes influence future treatments ($Y_{i, t-1} \rightarrow D_{it}$) \cite{feuerriegel_causal_2024, blackwell_how_2018};
+\textbf{Dynamic Confounding} (also called time-varying confounding) materializes in the temporal dimension, especially through feedback loops where past outcomes influence future treatments ($Y_{i, t-1} \rightarrow D_{it}$) \cite{feuerriegel_causal_2024, blackwell_how_2018};
 for instance, increased conflict intensity of a previous timeframe's outcome ($Y_{i,t-1}$) may influence new interventions ($D_{it}$), which then affects future conflict outcomes ($Y_{i,t+1}$).
 Such a structure violates the strict exogeneity assumption because the covariates required to adjust for the confounding (the history) are themselves affected by prior treatments \cite{blackwell_how_2018}.
-Consequently, identification in this context requires the strongest assumption of sequential ignorability \cite{robins_association_1999}: Treatment assignment does not depend on past potential outcomes conditional on the full history of observables \cite{blackwell_how_2018, lewis_doubledebiased_2021, semenova_inference_2023}.
+Consequently, identification in this context requires the strongest assumption of Sequential Ignorability \cite{robins_association_1999}: treatment assignment does not depend on past potential outcomes conditional on the full history of observables \cite{blackwell_how_2018, lewis_doubledebiased_2021, semenova_inference_2023}.
 
 Mitigation strategies in recent literature include: \textbf{Sequential Peeling}, a method to address feedback loops where effects are estimated recursively to isolate the causal effect of the current treatment from future confounders \cite{lewis_doubledebiased_2021, hays_double_2025}.
 Another dynamic deconfounding method is to use history-dependent propensity scores to "break" the feedback loop \cite{papadogeorgou_causal_2022, mukaigawara_spatiotemporal_2025}.
 \textbf{Spatial Basis Functions \& Smoothing} model spatial confounding as a smooth surface by using flexible functions---for instance, nonparametric smoothing or tensor splines---to absorb trends that would otherwise lead to biased treatment effects \cite{racek_capturing_2025, conley_standard_2025}.
 \textbf{Data Transformations} can be used in the case of static spatial confounding (fixed factors that do not change over the study period).
-Examples include Difference-in-Differences (DiD) extensions \cite{callaway_difference--differences_2021, dechaisemartin_two-way_2023, gavrilova_difference--difference_2025, yang_stoat_2025} and within-group (WG)/first-differencing (FD) transformations \cite{clarke_double_2025}.
+Examples include DiD extensions \cite{callaway_difference--differences_2021, dechaisemartin_two-way_2023, gavrilova_difference--difference_2025, yang_stoat_2025} and within-group (WG)/first-differencing (FD) transformations \cite{clarke_double_2025}.
 There are also methods that utilize \textbf{Latent Modeling} and \textbf{Proxy Learning} in cases where confounders are unobserved.
-These techniques use high-dimensional data (or auxiliary variables) to learn a low-dimensional latent representation of the confounders, for instance with an Autoencoder \cite{ali_estimating_2024} or even multimodal approaches \cite{klaassen_doublemldeep_2024, pettersson_debiasing_2025}.
+These techniques use high-dimensional data (or auxiliary variables) to learn a low-dimensional latent representation of the confounders, for instance with an autoencoder \cite{ali_estimating_2024} or even multimodal approaches \cite{klaassen_doublemldeep_2024, pettersson_debiasing_2025}.
 See also \cite{christiansen_toward_2022, kaddour_causal_2022, semenova_inference_2023, pollmann_causal_2023}.
 
 \subsection{Positivity}
@@ -53,21 +53,20 @@ In conflict research, this is often violated by structural zeros or ones (e.g., 
 Furthermore, in high-dimensional settings and when treatments are continuous, this can lead to issues since the overlap deteriorates asymptotically;
 as the dimension of $X_{it}$ increases, units become unique and propensity scores collapse to the boundaries (a practical violation) \cite{damour_overlap_2021, colangelo_double_2025, petersen_diagnosing_2012}.
 These violations result in the inverse probability weights exploding, inflating variance and introducing bias.
-Solutions include \textbf{Trimming} the sample based on the propensity score to discard extreme observations and restrict inference on subsamples with enough overlap \cite{crump_dealing_2009};
+Solutions include \textbf{Trimming} the sample based on the propensity score to discard extreme observations and restrict inference to subsamples with enough overlap \cite{crump_dealing_2009};
 \textbf{Overlap Weights} to continuously down-weight units in the tails of the propensity score distribution \cite{li_addressing_2019};
 and \textbf{Shift Interventions} that estimate the effect of small perturbations to the treatment \cite{colangelo_double_2025, kennedy_towards_2023}.
-The first two are best for binary treatments whereas the shift interventions are for continuous treatments.
+The first two are best suited for binary treatments, whereas Shift Interventions are designed for continuous treatments.
 
 \subsection{Statistical Dependence}
 \label{subsec:statistical_dependence}
 Besides the above-mentioned general identification assumptions for causal inference, there are also estimation/inference assumptions.
 Conflict data violates the i.i.d. assumption since it exhibits strong autocorrelation \cite{racek_capturing_2025, schutte_diffusion_2011, buhaug_contagion_2008}---spatio-temporal dependencies where error terms are correlated across units---that leads to two distinct issues:
-(1) Inference failure, where standard variance estimators underestimate uncertainty and standard errors are too small;
-resulting in Type-I errors and spurious significance \cite{conley_standard_2025, conley_gmm_1999}.
+(1) Inference failure, where standard variance estimators underestimate uncertainty and standard errors are too small, resulting in Type-I errors and spurious significance \cite{conley_standard_2025, conley_gmm_1999}.
 (2) Data leakage when utilizing random cross-validation splits and when training units that are spatio-temporally close to test units.
-This is particularly relevant for DML, since the framework relies on the regularity condition of i.i.d. observations and uses cross-fitting to get valid standard errors and convergence rates (See \cref{sec:dml} for further details) \cite{chernozhukov_doubledebiased_2018, chiang_multiway_2022}.
+This is particularly relevant for DML, since the framework relies on the regularity condition of i.i.d. observations and uses cross-fitting to obtain valid standard errors and convergence rates (see \cref{sec:dml} for further details) \cite{chernozhukov_doubledebiased_2018, chiang_multiway_2022}.
 Recent research addresses this issue via \textbf{Block Cross-Fitting}, which splits data by time periods or spatial clusters rather than randomly and per unit to preserve the dependence structure within folds \cite{clarke_double_2025}.
-\textbf{Neighbor-Left-Out Cross-Fitting} builds on this by excluding neighboring observations, therefore preventing information leakage from spatially or temporally adjacent units (See \cref{subsec:dml_hte} for more details) \cite{semenova_inference_2023}.
+\textbf{Neighbors-Left-Out Cross-Fitting} builds on this by excluding neighboring observations, thereby preventing information leakage from spatially or temporally adjacent units (see \cref{subsec:dml_hte} for more details) \cite{semenova_inference_2023}.
 The method is specifically designed for time-series and spatially dependent data where dependence decays over time and distance.
 Another related approach is \textbf{Multiway Cross-Fitting}, which accounts for correlation along multiple dimensions simultaneously (e.g., clustering by both time period and spatial unit in panel data) \cite{chiang_multiway_2022}.
 Additionally, inference should use \textbf{HAC Estimators} (Heteroskedasticity and Autocorrelation Consistent) to address issue (1) and correctly quantify uncertainty in the presence of spatial and temporal correlation \cite{conley_gmm_1999, kelejian_hac_2007, cameron_robust_2011, chiang_multiway_2022}.
