@@ -2,8 +2,8 @@
 % \section{Spatio-Temporal Challenges}
 \label{sec:spatio_temporal}
 Standard causal inference assumptions for independent cross-sectional observations often fail in the context of complex dependencies across space and time.
-Therefore, when attempting to infer conflict relations and dynamics using real-world data, a multitude of problems arise \cite{racek_capturing_2025, schutte_diffusion_2011}.
-The following section outlines the principal challenges and current state-of-the-art solutions: Interference/Persistence (\Cref{subsec:sutva}), Confounding (\Cref{subsec:spatial_dynamic_confounding}), Positivity (\Cref{subsec:positivity}), and Statistical Dependence (\Cref{subsec:statistical_dependence}).
+Therefore, when attempting to infer conflict relations and dynamics using real-world data, a multitude of problems arise.
+The following section outlines the principal challenges and current state-of-the-art solutions: Interference/Persistence (\cref{subsec:sutva}), Confounding (\cref{subsec:spatial_dynamic_confounding}), Positivity (\cref{subsec:positivity}), and Statistical Dependence (\cref{subsec:statistical_dependence}).
 Conflict data also presents specific challenges related to data quality---such as reporting bias---which will not be discussed in detail here (for further reading, see \cite{weidmann_accuracy_2015, weidmann_closer_2016, gohdes_first_2013}).
 
 \subsection{The Stable Unit Treatment Value Assumption}
@@ -18,7 +18,7 @@ Therefore, an outcome $Y_{it}$ depends on the whole treatment history $\tilde{D}
 
 Since conflict is a dynamic system in the real world, interventions in one region potentially lead to diffusion effects over space and through time; for instance, violence may displace activity to neighboring areas over time \cite{papadogeorgou_causal_2022}.
 There are several approaches to address these violations: \textbf{Geometry-Based} methods use concentric rings or spatial buffers to define mappings that capture a unit's exposure (or non-exposure) and estimate the effect of nearby treatments on outcomes \cite{pollmann_causal_2023, butts_difference--differences_2023}.
-\textbf{Stochastic Interventions/Point Processes} model treatments as probability distributions across space and time by redefining estimands to explicitly incorporate interference patterns, allowing for unstructured interference \cite{papadogeorgou_causal_2022, zhou_estimating_2025, mukaigawara_spatiotemporal_2025}.
+\textbf{Stochastic Interventions/Point Processes} model treatments as probability distributions across space and time by redefining estimands to explicitly incorporate interference patterns \cite{papadogeorgou_causal_2022, zhou_estimating_2025, mukaigawara_spatiotemporal_2025}.
 \textbf{Network/Dependency Graphs} are often used for non-geographic interference (e.g., supply chains) and relax SUTVA by allowing interference only between connected nodes \cite{leung_treatment_2020, hays_double_2025}.
 Finally, \textbf{Nonparametric Smoothing} assumes interference follows a continuous diffusive function that is modeled using decay basis functions or neural networks \cite{racek_capturing_2025, ali_estimating_2024}.
 
@@ -32,13 +32,13 @@ So if researching conflict $D_{it} \leftarrow U_i \rightarrow Y_{it}$ and $U_i$ 
 Such a structure violates the strict exogeneity assumption because the covariates required to adjust for the confounding (the history) are themselves affected by prior treatments \cite{blackwell_how_2018}.
 Consequently, identification in this context requires the strongest assumption of Sequential Ignorability \cite{robins_association_1999}: treatment assignment must be independent of past potential outcomes conditional on the full history of observables \cite{blackwell_how_2018, lewis_doubledebiased_2021, semenova_inference_2023}.
 
-Mitigation strategies in recent literature include: \textbf{Sequential Peeling}, a method to address feedback loops where effects are estimated recursively to isolate the causal effect of the current treatment from future confounders \cite{lewis_doubledebiased_2021, hays_double_2025}.
+Mitigation strategies in recent literature include: \textbf{Sequential Peeling}, a method to address feedback loops where effects are estimated recursively to isolate the causal effect of the current treatment from future confounders (for more details, see \cref{subsec:dml_dte}) \cite{lewis_doubledebiased_2021, hays_double_2025}.
 Another dynamic deconfounding method is to use history-dependent propensity scores to "break" the feedback loop \cite{papadogeorgou_causal_2022, mukaigawara_spatiotemporal_2025}.
 \textbf{Spatial Basis Functions \& Smoothing} model spatial confounding as a smooth surface by using flexible functions---for instance, nonparametric smoothing or tensor splines---to absorb trends that would otherwise lead to biased treatment effects \cite{racek_capturing_2025, conley_standard_2025}.
 \textbf{Data Transformations} can be used in the case of static spatial confounding (fixed factors that do not change over the study period).
 Examples include DiD extensions \cite{callaway_difference--differences_2021, dechaisemartin_two-way_2023, gavrilova_difference--difference_2025, yang_stoat_2025} and within-group (WG)/first-differencing (FD) transformations \cite{clarke_double_2025}.
-There are also methods that utilize \textbf{Latent Modeling} and \textbf{Proxy Learning} in cases where confounders are unobserved.
-These techniques use high-dimensional data (or auxiliary variables) to learn a low-dimensional latent representation of the confounders, for instance with an autoencoder \cite{ali_estimating_2024} or even multimodal approaches \cite{klaassen_doublemldeep_2024, pettersson_debiasing_2025}.
+There are also methods that utilize \textbf{Latent Modeling} and \textbf{Proxy Learning} in situations where confounders are unobserved.
+These techniques use high-dimensional data (or auxiliary variables) to learn a low-dimensional latent representation of the confounders, for instance with an autoencoder \cite{ali_estimating_2024} or even multimodal \cite{klaassen_doublemldeep_2024, pettersson_debiasing_2025}.
 See also \cite{christiansen_toward_2022, kaddour_causal_2022, semenova_inference_2023, pollmann_causal_2023}.
 
 \subsection{Positivity}
@@ -46,8 +46,8 @@ See also \cite{christiansen_toward_2022, kaddour_causal_2022, semenova_inference
 Another causal identification requirement is the Positivity (also sometimes called Overlap) assumption, which requires that treatment assignment is not deterministic given the covariates \cite{rosenbaum_central_1983}.
 This implies that every unit must have a non-zero probability of receiving the treatment; formally, the propensity scores must be strictly bounded away from zero and one: $0 < \epsilon < P(D_{it}=1 \mid X_{it}) < 1 - \epsilon \quad \forall X_{it} \in \mathcal{X}$.
 For continuous treatments, positivity requires sufficient variation in the treatment intensity conditional on controls \cite{colangelo_double_2025, chernozhukov_doubledebiased_2018}.
-In conflict research, this is often violated by structural zeros or ones (e.g., some regions may have a near-zero probability of conflict no matter the covariates), frequently caused by strategic targeting that leaves no comparable counterfactual units (a structural violation) \cite{kuzmanovic_causal_2024}.
-Furthermore, in high-dimensional settings and when treatments are continuous, this can lead to issues since the overlap deteriorates asymptotically; as the dimension of $X_{it}$ increases, units become unique and propensity scores collapse to the boundaries (a practical violation) \cite{damour_overlap_2021, colangelo_double_2025, petersen_diagnosing_2012}.
+In conflict research, this is often violated by structural zeros or ones (e.g., some regions may have a near-zero probability of conflict no matter the covariates), caused by strategic targeting that leaves no comparable counterfactual units (a structural violation) \cite{kuzmanovic_causal_2024}.
+In high-dimensional settings and when treatments are continuous, this can lead to issues since the overlap deteriorates asymptotically; as the dimension of $X_{it}$ increases, units become unique and propensity scores collapse to the boundaries (a practical violation) \cite{damour_overlap_2021, colangelo_double_2025, petersen_diagnosing_2012}.
 These violations result in the inverse probability weights exploding, inflating variance and introducing bias.
 Solutions include \textbf{Trimming} the sample based on the propensity score to discard extreme observations and restrict inference to subsamples with enough overlap \cite{crump_dealing_2009};
 \textbf{Overlap Weights} to continuously down-weight units in the tails of the propensity score distribution \cite{li_addressing_2019};
