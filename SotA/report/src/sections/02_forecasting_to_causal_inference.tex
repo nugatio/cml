@@ -4,20 +4,18 @@
 \subsection{The State of the Art in Conflict Forecasting}
 Contemporary conflict forecasting has moved beyond small-scale country-specific designs used in earlier research \cite{cederman_predicting_2017, hegre_introduction_2017}.
 Through efforts such as the Violence and Impacts Early-Warning System (VIEWS) \cite{hegre_views_2019} or the ACLED Volatility Risk Index/CAST \cite{rod_review_2024}, combined with a "revolution" in data and methodology, the scope and predictive performance of forecasting in conflict research have increased substantially \cite{croicu_forecasting_2025}.
-Current data---led by datasets such as the Uppsala Conflict Data Program's Georeferenced Event Dataset (UCDP GED) \cite{sundberg_introducing_2013} or the Armed Conflict Event and Location Dataset (ACLED) \cite{raleigh_introducing_2010}---captures local dynamics through global collections of individual armed conflict events on a daily basis over long time series.
-This highly disaggregated microdata, containing millions of data points, is then often leveraged to perform a spatio-temporal aggregation;
-typically, a PRIO-GRID lattice \cite{tollefsen_prio-grid_2012} with $0.5^\circ \times 0.5^\circ$ spatial grid cells ($55 \times 55$ km$^2$ at the equator) and a monthly temporal resolution is used \cite{hegre_202324_2025, hegre_views_2019}.
+Current data---led by datasets such as the Uppsala Conflict Data Program's Georeferenced Event Dataset (UCDP GED) \cite{sundberg_introducing_2013} and the Armed Conflict Event and Location Dataset (ACLED) \cite{raleigh_introducing_2010}---captures local dynamics through global collections of individual armed conflict events on a daily basis over long time series.
+This highly disaggregated microdata, containing millions of data points, is then often leveraged to perform a spatio-temporal aggregation; typically, a PRIO-GRID lattice \cite{tollefsen_prio-grid_2012} with $0.5^\circ \times 0.5^\circ$ spatial grid cells ($55 \times 55$ km$^2$ at the equator) and a monthly temporal resolution is used \cite{hegre_202324_2025, hegre_views_2019}.
 These event-based frameworks are usually complemented with structural covariates---static, long-term data like economic and social indicators---to combine conflict dynamics with underlying socio-economic conditions \cite{tollefsen_prio-grid_2012, hegre_views_2019, rod_review_2024}.
 Moreover, the integration of remote sensing data variables (e.g., vegetation indices, satellite imagery) has further enhanced this spatial granularity \cite{mueller_monitoring_2021, mhanna_using_2023, racek_conflict_2024}.
-Recent models perform well at static risk assessment but have limited capabilities in predicting conflict dynamics (e.g., onsets, escalations, and terminations) \cite{mueller_monitoring_2021, vesco_united_2022}.
 
+Recent models perform well at static risk assessment but have limited capabilities in predicting conflict dynamics (e.g., onsets, escalations, and terminations) \cite{mueller_monitoring_2021, vesco_united_2022}.
 Methodologically, most of today's approaches use nonparametric ensembles (e.g., XGBoost or Random Forests) that excel at capturing nonlinear interactions and minimizing predictive error (e.g., Brier scores) \cite{hegre_views_2019, hegre_views2020_2021}.
 A current evolution in the field is the shift from manual feature engineering to deep learning, with some frontier models adopting architectures that autonomously learn representations and capture intricate long-term temporal dependencies \cite{croicu_forecasting_2025}.
 Examples include Long Short-Term Memory (LSTM) networks, Recurrent Neural Networks (RNNs), and Transformers, such as Temporal Fusion Transformers (TFTs) \cite{hegre_202324_2025, vesco_united_2022}.
-Another emerging approach is direct forecasting from news corpora by using Transformer-based Large Language Models (LLMs) and Retrieval-Augmented Generation (RAG) \cite{croicu_newswire_2025, nemkova_large_2025}.
+Another emerging approach is direct forecasting from news corpora using Transformer-based Large Language Models (LLMs) and Retrieval-Augmented Generation (RAG) \cite{croicu_newswire_2025, nemkova_large_2025}.
 While such "black box" ML models maximize metrics like AUROC, they lack interpretability and obscure structural mechanisms \cite{murphy_promise_2024, cederman_predicting_2017}.
-Most empirical studies also treat conflict diffusion simply as a nuisance, controlling for it by including simple spatial and temporal lags;
-this leads to very limited insights into the diffusion of armed conflict \cite{racek_capturing_2025}.
+Most empirical studies also treat conflict diffusion simply as a nuisance, controlling for it by including simple spatial and temporal lags; this leads to very limited insights into the diffusion of armed conflict \cite{racek_capturing_2025}.
 Research by \textcite{racek_capturing_2025} addresses these gaps by using a Generalized Additive Model (GAM) with nonparametric smoothing.
 This allows the model to capture the spatio-temporal diffusion of conflict over large distances and temporal lags of up to 24 months while remaining fully interpretable.
 
@@ -27,33 +25,28 @@ Yet, as \textcite[23]{cederman_predicting_2017} argue, "theory-free prediction d
 Since prediction and explanation represent distinct epistemological goals, a model that excels at forecasting with high accuracy may reveal nothing about underlying mechanisms and relationships \cite{shmueli_explain_2010}.
 Therefore, architecture selection often involves a trade-off between model accuracy and explanatory capabilities \cite{breiman_statistical_2001}.
 Even if the predictive accuracy of a model is high---for instance, successfully forecasting increasing levels of violence---policymakers may lack the trust to take action and authorize costly interventions \cite{chadefaux_conflict_2017, rudin_stop_2019}.
-Furthermore, even fully interpretable models like GAMs cannot differentiate between causation and correlation;
-as \textcite{cederman_predicting_2017} note, forecasting models identify correlates of conflict, not causes.
+Furthermore, even fully interpretable models like GAMs cannot differentiate between causation and correlation; as \textcite{cederman_predicting_2017} note, forecasting models identify correlates of conflict, not causes.
 Crucially, policy decisions require counterfactual reasoning, which purely observational forecasting models cannot provide \cite{feuerriegel_causal_2024}.
 Relying on associations without considering confounding or reverse causality can therefore lead to misguided policies and interventions (e.g., erroneous foreign aid allocation, ineffective military actions) \cite{nunn_us_2014, papadogeorgou_causal_2022}.
 CML bridges this gap by enabling valid statistical inference for treatment effects while utilizing high-dimensional data \cite{athey_machine_2019, feuerriegel_causal_2024}.
 
 \subsection{Causal Machine Learning}
-Causal effect estimation is challenging because of the inability to observe both treated and untreated potential outcomes for the same unit simultaneously;
-this is generally referred to as the fundamental problem of causal inference \cite{holland_statistics_1986}.
+Causal effect estimation is challenging because of the inability to observe both treated and untreated potential outcomes for the same unit simultaneously; this is generally referred to as the fundamental problem of causal inference \cite{holland_statistics_1986}.
 CML addresses this by combining the flexible estimation power of ML with principles from causal inference \cite{athey_machine_2019, chen_recent_2025}.
 While traditional econometric approaches struggle with high-dimensional covariate spaces \cite{belloni_high-dimensional_2014} and standard ML methods introduce regularization bias \cite{feuerriegel_causal_2024, kaddour_causal_2022}, CML builds on the potential outcomes framework \cite{rubin_estimating_1974} to formalize causal inference through counterfactual reasoning and relax restrictive parametric assumptions of traditional regressions \cite{athey_machine_2019, fuhr_estimating_2024}.
 This means explicitly modeling the confounding structure by flexibly approximating nuisance functions and adjusting for high-dimensional confounding without restrictive parametric assumptions \cite{feuerriegel_causal_2024}.
 The framework therefore allows for valid effect estimation in environments with a high number of covariates \cite{belloni_high-dimensional_2014} and complex nonlinear relations \cite{fuhr_estimating_2024}.
 
-A multitude of methodological approaches for effect estimation in CML have emerged, with recent research moving beyond the global Average Treatment Effect (ATE) and predominantly focusing on Heterogeneous Treatment Effects (HTE) via the Conditional Average Treatment Effect (CATE) \cite{kunzel_metalearners_2019, athey_recursive_2016}.
+A multitude of methodological approaches for effect estimation in CML have emerged, with recent research moving beyond the global Average Treatment Effect (ATE) and predominantly focusing on Heterogeneous Treatment Effect (HTE) via the Conditional Average Treatment Effect (CATE) \cite{kunzel_metalearners_2019, athey_recursive_2016}.
 The following taxonomy gives a broad overview of the major areas\footnote{Note that these categories are not mutually exclusive and represent conceptually distinct concepts.
 For instance, DML can be seen as a statistical principle (bias-correction) that is implemented within specific algorithms (e.g., Causal Forests, R-learner, DR-learner), while meta-learners can be seen as architectural wrappers (model composition).}:
 \textbf{Tree-based methods}, most notably Causal Forests, are specialized and adapted versions of the Random Forest algorithm that split to maximize treatment effect heterogeneity across leaves, as opposed to prediction accuracy \cite{wager_estimation_2017, athey_generalized_2019}.
 \textbf{Meta-learners} decompose the problem into multiple standard prediction subproblems that can then be solved with any common supervised learning method \cite{kunzel_metalearners_2019}.
-For instance, the T-learner (T for Two) fits separate base-learners for treatment and control units, followed by taking the difference of model estimates;
-other variants include the S-learner or the X-learner \cite{kunzel_metalearners_2019, chen_recent_2025, chernozhukov_applied_2024}.
-Double Machine Learning represents a general framework within the larger group of \textbf{Orthogonalization Methods}, that utilizes Neyman-orthogonal score functions to control for regularization bias in high-dimensional settings (for an extensive discussion, see \cref{sec:dml}) \cite{chernozhukov_doubledebiased_2018}.
-Furthermore, extensions to Instrumental Variables (IV) and Difference-in-Differences (DiD) have recently come forward to address situations where the unconfoundedness assumption is violated \cite{chang_doubledebiased_2020, chernozhukov_doubledebiased_2018, lan_meta-learner_2025}.
+For instance, the T-learner (T for Two) fits separate base-learners for treatment and control units, and subsequently calculates the difference between their estimates; other variants include the S-learner or the X-learner \cite{kunzel_metalearners_2019, chen_recent_2025, chernozhukov_applied_2024}.
+Double Machine Learning represents a general framework within the larger group of \textbf{orthogonalization methods} that utilizes Neyman-orthogonal score functions to control for regularization bias in high-dimensional settings (for an extensive discussion, see \cref{sec:dml}) \cite{chernozhukov_doubledebiased_2018}.
+Furthermore, extensions to Instrumental Variables (IV) and Difference-in-Differences (DiD) have recently emerged to address situations where the unconfoundedness assumption is violated \cite{chang_doubledebiased_2020, chernozhukov_doubledebiased_2018, lan_meta-learner_2025}.
 
-Within conflict research, CML has only received sparse application.
-Notable exceptions include: \textcite{christiansen_toward_2022}, who applied spatio-temporal models to analyze the relationship between armed conflict and forest loss in Colombia;
-\textcite{kuzmanovic_causal_2024}, who developed a CML framework for predicting HTEs of aid disbursements;
-and studies evaluating the impact of US airstrikes on insurgent violence in Iraq \cite{papadogeorgou_causal_2022, mukaigawara_spatiotemporal_2025}.
+Within conflict research, CML has received limited application.
+Notable exceptions include: \textcite{christiansen_toward_2022}, who applied spatio-temporal models to analyze the relationship between armed conflict and forest loss in Colombia; \textcite{kuzmanovic_causal_2024}, who developed a CML framework for predicting HTEs of aid disbursements; and studies evaluating the impact of US airstrikes on insurgent violence in Iraq \cite{papadogeorgou_causal_2022, mukaigawara_spatiotemporal_2025}.
 Additional applications include \cite{zhou_estimating_2025, sun_revealing_2022, ge_modelling_2022}.
 However, addressing the challenges of spatio-temporal diffusion when applying the DML framework remains an open research area.
