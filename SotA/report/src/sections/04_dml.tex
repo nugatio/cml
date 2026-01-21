@@ -3,22 +3,22 @@
 
 \subsection{The Basics}
 \label{subsec:basics}
-The high-dimensional setting of conflict data where the number of potential confounders is large relative to the numbre of observations necessitates the usage of ML methods.
-While standard ML methods achive strong predictive performance trough regularization, the latter also introduces systematic bias in treatment effect estimates that do not vanish with increasing sample size.
-Double Machine Learning---formally introduced by \textcite{chernozhukov_doubledebiased_2018} in 2018---revolves the regularization bias problem and allows for valid causal inference combined with flexible ML methods.
+The high-dimensional setting of conflict data, where the number of potential confounders is large relative to the number of observations, necessitates the usage of ML methods.
+While standard ML methods achieve strong predictive performance through regularization, the latter also introduces systematic bias in treatment effect estimates that does not vanish with increasing sample size.
+Double Machine Learning (DML)---formally introduced by \textcite{chernozhukov_doubledebiased_2018} in 2018---resolves the regularization bias problem and allows for valid causal inference combined with flexible ML methods.
 
-%\paragraph*{The Partially Linear Regression}
 To illustrate the concept of DML, consider the following Partially Linear Regression (PLR) model \cite{robinson_root-n-consistent_1988}:
 \begin{alignat*}{2}
 Y &= D\theta_0 + g_0(X) + U, \quad &\hspace{\fill} \mathbb{E}[U|X,D] &= 0 \\
 D &= m_0(X) + V, &\hspace{\fill} \mathbb{E}[V|X] &= 0
 \end{alignat*}
 where $Y$ denotes the outcome (e.g., conflict fatalities), $D$ the treatment (e.g., military intervention, aid allocation), $U$ and $V$ disturbances, and $X \in \mathbb{R}^p$ a high-dimensional vector of confounders (e.g., GDP, population density, conflict event data).
-$\theta_0$ is the causal parameter of interes that captures the causal effect of $D$ on $Y$, while the nuisance functions $g_0(X)$ and $m_0(X) = \mathbb{E}[D|X]$ (the propensity score) are unknown and potentially complex.
+$\theta_0$ is the causal parameter of interest that captures the causal effect of $D$ on $Y$, while the nuisance functions $g_0(X)$ and $m_0(X) = \mathbb{E}[D|X]$ (the propensity score) are unknown and potentially complex.
 The challenge lies in making a valid estimation of $\theta_0$ despite the high dimensionality of the nuisance functions $\eta_0 = (g_0, m_0)$.
 
-Simply using a flexible ML algorithm like random forest to estimate $\theta_0$ by (1) estimating $g_0$ and (2) regressing the residuals $Y - \hat{g}(X)$ on $D$ leads to biased results.
-Modern ML methods rely on regularization to manage high-dimensional data, which introduces regularization bias; the estimation error $\hat{g}(X) - g_0(X)$ remains correlated with $D$ through their mutual dependence on $X$.
+Simply using a flexible ML algorithm like a Random Forest to estimate $\theta_0$ by (1) estimating $g_0$ and (2) regressing the residuals $Y - \hat{g}(X)$ on $D$ leads to biased results.
+Modern ML methods rely on regularization to manage high-dimensional data, which introduces regularization bias;
+the estimation error $\hat{g}(X) - g_0(X)$ remains correlated with $D$ through their mutual dependence on $X$.
 This bias propagates directly into $\hat{\theta}$, does not vanish at rate $1/\sqrt{n}$, and invalidates standard inference.
 
 DML resolves this by employing Neyman Orthogonality and constructing an orthogonal score that is insensitive to first-order errors in nuisance estimation.
@@ -29,13 +29,17 @@ In the PLR example, the orthogonal score function takes the form:
 \begin{equation*}
     \psi(W; \theta, \eta) = (Y - g(X) - D\theta)(D - m(X))
 \end{equation*}
-where $W = (Y, D, X)$ and $\eta = (m, g)$. This satisfies the Neyman orthogonality condition:
+where $W = (Y, D, X)$ and $\eta = (m, g)$.
+This satisfies the Neyman orthogonality condition:
 \begin{equation*}
 \partial_\eta \mathbb{E}[\psi(W; \theta_0, \eta_0)][\eta - \eta_0] = 0
 \end{equation*}
 This condition ensures that first-order errors in estimating $\hat{g}$ and $\hat{m}$ vanish, leaving only second-order errors that do not affect the asymptotic distribution of $\hat{\theta}$.
 
-To prevent overfitting, DML utilizes Cross-Fitting: (1) the sample is randomly partitioned into $K$ folds; (2) the nuisance functions are estimated on the remaining $K-1$ folds; (3) the orthogonal score is evaluated on the held-out fold; (4) the results are either averaged across folds (DML1) or pooled into a single estimating equation solved over all observations (DML2).
+To prevent overfitting, DML utilizes Cross-Fitting: (1) the sample is randomly partitioned into $K$ folds;
+(2) the nuisance functions are estimated on the remaining $K-1$ folds;
+(3) the orthogonal score is evaluated on the held-out fold;
+(4) the results are either averaged across folds (DML1) or pooled into a single estimating equation solved over all observations (DML2).
 Under regularity conditions, this separation guarantees that the final DML estimator is $\sqrt{n}$-consistent and asymptotically normal:
 \begin{equation*}
     \sqrt{n}(\hat{\theta} - \theta_0) \xrightarrow{d} \mathcal{N}(0, \sigma^2)
@@ -43,9 +47,11 @@ Under regularity conditions, this separation guarantees that the final DML estim
 provided that the nuisance estimators converge at a rate of $n^{-1/4}$ or faster.
 
 \subsection{DML for Dynamic Treatment Effects}
+\label{subsec:dml_dte}
 The standard DML framework as described in \Cref{subsec:basics} addresses regularization bias in static settings.
 However, applying it to spatio-temporal conflict data introduces new challenges---which were discussed in \Cref{sec:spatio_temporal}---that require specialized extensions.
-\textcite{lewis_doubledebiased_2021} (comprehensive version: \cite{lewis_doubledebiased_2021-1}) were one of the first researchers to introduce a solution for DML with dynamic treatment effects (DTE), which focuses on dealing with temporal persistence and feedback loops (see \Cref{subsec:spatial_dynamic_confounding}); their proposed Dynamic DML estimation extends the Neyman orthogonality principle to dynamic treatment schemes (settings where multiple treatments are assigned over time and where treatments can have a causal effect on future outcomes or the state of the treated unit).
+\textcite{lewis_doubledebiased_2021} (alternative/comprehensive version: \cite{lewis_doubledebiased_2021-1}) were among the first researchers to introduce a solution for DML with Dynamic Treatment Effects (DTE), which focuses on dealing with temporal persistence and feedback loops (see \Cref{subsec:spatial_dynamic_confounding});
+their proposed Dynamic DML estimation extends the Neyman orthogonality principle to dynamic treatment schemes (settings where multiple treatments are assigned over time and where treatments can have a causal effect on future outcomes or the state of the treated unit).
 
 A partially linear state space Markov decision process $\{X_t, D_t, Y_t\}_{t=1}^{m}$ (for a time horizon $t=1, \dots, m$) where $X_t \in \mathbb{R}^p$ denotes the high-dimensional state, $D_t \in \mathbb{R}^d$ the treatment, and $Y_t$ the outcome (at time $t$ respectively) will serve as a simplified application example of the algorithm, similar to the PLR used in \Cref{subsec:basics}.
 The structural equations take the form:
@@ -61,7 +67,8 @@ Therefore, the sequence of dynamic treatment effects $\theta_t$ for $t\in\{1, \d
 To estimate the expected difference between applying and not applying the treatment, it suffices to estimate the full sequence of dynamic treatment effects $\theta_0, \dots, \theta_m$.
 
 To address the estimation problem, Dynamic DML builds on the principles from \Cref{subsec:basics} by constructing Neyman orthogonal moments at each stage via double residualization.
-The key innovation is a sequential peeling strategy that estimates effects backwards from the final period $m$ to the first period; the algorithm proceeds for $t=0,1,\dots,m$---and assuming access to dataset with $n$ i.i.d. samples from the Markovian process---as follows:
+The key innovation is a sequential peeling strategy that estimates effects backwards from the final period $m$ to the first period;
+the algorithm proceeds for $t=0,1,\dots,m$---and assuming access to a dataset with $n$ i.i.d. samples from the Markovian process---as follows:
 \begin{enumerate}
     \item \textbf{Nuisance Estimation:} For the current lag $t$, estimate the conditional expectations of the outcome and all relevant treatments with respect to the current history $X_{m-t}$.
     Recalculating the treatment residuals is required since treatment residuals from previous steps were calculated conditional on future states.
@@ -80,42 +87,84 @@ The key innovation is a sequential peeling strategy that estimates effects backw
     \end{equation*}
 \end{enumerate}
 
-The algorithm, as shown above, assumes the availability of $n$ independent time series of duration $m$ from the Markovian process.
-In conflict research, this assumption is rarely met since the data often exhibits strong temporal autocorrelation as mentioned in \Cref{subsec:statistical_dependence}.
-\textcite{lewis_doubledebiased_2021} propose a solution to this by estimating the DTEs for a fixed look-ahead horizon from a single long time-series.
-They split the time-series into sequential blocks, which are treated as roughly independent observations.
-Afterwards, a progressive nuisance estimation fitting approach is employed, where at every period, all prior blocks are used to train the nuisance models, which are then evaluated on the next block.
-Since the effect of current interventions on future outcomes vanishes over time due to discounting, the required look-ahead horizon $m$ only needs to grow logarithmically with the sample size ($m \approx \log_{1/\gamma} n$ with $\gamma < 1$).
-This logarithmic growth suffices to bound the approximation error to a negligible order of $1/\sqrt{n}$, ensuring the block-based approach remains valid asymptotically.
-The only caveat is that for correct inference, the underlying systems must be somewhat stationary and stable, ensuring that the dependencies between blocks vanish sufficiently fast to prevent estimation errors from propagating exponentially.
+% The algorithm, as shown above, assumes the availability of $n$ independent time series of duration $m$ from the Markovian process.
+% In conflict research, this assumption is rarely met since the data often exhibits strong temporal autocorrelation as mentioned in \Cref{subsec:statistical_dependence}.
+% \textcite{lewis_doubledebiased_2021} propose a solution to this by estimating the DTEs for a fixed look-ahead horizon from a single long time-series.
+% They split the time-series into sequential blocks, which are treated as roughly independent observations.
+% Afterwards, a progressive nuisance estimation fitting approach is employed, where at every period, all prior blocks are used to train the nuisance models, which are then evaluated on the next block.
+% Since the effect of current interventions on future outcomes vanishes over time due to discounting, the required look-ahead horizon $m$ only needs to grow logarithmically with the sample size ($m \approx \log_{1/\gamma} n$ with $\gamma < 1$).
+% This logarithmic growth suffices to bound the approximation error to a negligible order of $1/\sqrt{n}$, ensuring the block-based approach remains valid asymptotically.
+% The only caveat is that for correct inference, the underlying systems must be somewhat stationary and stable, ensuring that the dependencies between blocks vanish sufficiently fast to prevent estimation errors from propagating exponentially.
 
 Furthermore, the framework generalizes beyond the Markovian case utilized thus far to Structural Nested Mean Models (SNMMs) \cite{robins_new_1986} with minimal modifications.
-In this setting, restrictive independence assumptions are replaced by the weaker condition of sequential conditional exogeneity; this essentially requires that treatments are randomized conditional on past history.
+In this setting, restrictive independence assumptions are replaced by the weaker condition of sequential conditional exogeneity;
+this essentially requires that treatments are randomized conditional on past history.
 SNMMs also allow for arbitrary state spaces and discrete or continuous treatments, employing blip functions for identification.
-These functions capture the expected difference in the outcome if the treatment is removed while continuing with a target policy thereafter.
+These functions capture the expected difference in the outcome if the treatment is removed, while continuing with a target policy thereafter.
+Nevertheless, applying the frameork to empirical settings like conflict research remains challenging due to multiple factors.
+For instance, even after easing the assumption to sequential conditional exogenity, conflict settings might still violate it since unobversed strategic factors that drive both treatment and outcome (spatial confounding) are often present.
+The model also does not take spatial spillovers into account, thereby violating the SUTVA essential for valid causal inference.
 
-Other recent literatuer has further expanded DML for dynamic and panel data settings.
+\subsection{DML for Heterogenous Treatment Effects in Dynamic Panels}
+\label{subsec:dml_hte}
+The frameworks presented in \cref{subsec:basics} and \cref{subsec:dml_dte} estimate the averge treatment effect (ATE)\footnote{For both HTE estimation exists. See \cite{semenova_debiased_2021} for the DML CATE extension and the original DML for DTE paper \cite{lewis_doubledebiased_2021}.}.
+For policy applications or to analyze conflict diffusion, understanding how treatment effects vary throuhout contexts and characteristics is important.
+While the dynamic DML frework (\Cref{subsec:dml_dte}) addresses temporal feedback loops, coflict data experpts additional challenges (See \cref{sec:spatio_temporal}).
+\textcite{semenova_inference_2023} (also \cite{semenova_estimation_2022}) present an inference approach that tackles both of these aspects.
+Their method estimates the Conditional Average Treatment Effect (CATE)---which captuers treatment effect heterogenity as a function of unit characteristics---and works with high-dimensional panels; they specifically address static spatial confounding (unobserved unit-specific heterogenity/unit fixed effects) and statistical dependence (weak dependence).
+
+Consider the following adjustment to the PLR model from \cref{subsec:basics} that allows for heterogeneous effects ($i = 1,\dots,N$ denotes units, and $t=1,\dots,T$ time):
+\begin{alignat*}{2}
+    Y_{it} &= D_{it}' \theta_0 + e_0(X_{it}) + \xi_i^E + U_{it}, \quad &\hspace{\fill} \mathbb{E}[U_{it} | D_{it}, X_{it}, \Phi_{it}] &= 0 \\
+    D_{it} &= m_{i0}(X_{it}) + V_{it}, &\hspace{\fill} \mathbb{E}[V_{it}| X_{it},\Phi_{it}] &= 0
+\end{alignat*}
+where $\theta_0$ is the treatment effect parameter vector characterizing the CATE, $\Phi_{it}$ is the filtration of predetermined variables for unit $i$ prior to period $t$, $D_{it}$ is the technical treatment vector (defined as the interaction between the base treatment $P_{it}$ (the vector with policy variables) and the dictionary of transformations $K(X_{it})$: $D_{it} := P_{it} \cdot K(X_{it})$) , $e_0(X_{it})$ is the complex confounding function of time-varying controls, and $\xi_i^E$ is the unobserved outcome unit fixed effect (spatial confounding).
+The error term $U_{it}$ is assumed to satisfy sequential conditional exogeneity.
+
+Standard fixed effects estimation is problematic in high-dimensional dynamic settings since it often leads to biased results and overfitting.
+The authors therefore take a fixed effects approcach, in which tehy approximate the vector of unobversed components of units effets $\xi^E$ by a weakly sparse vector.
+Instead of treating the effects as a nuisance to be differenced out, the methods estimates them using Lasso.
+This assumes that the unit-specific deviations are well-approximated by a sparse vector, allowing them to be learned consistently alongside other nuisance parameters even when number of units is large.
+
+For the estimation oft the high-dimensional parameter $\theta_0$, the DML principle of orthogonalization is applied to partial out the influence of confounders and unit effects.
+The unit-specific nuisance functions are defined as:
+\begin{align*}
+    m_{0i}(X_{it}) &= \mathbb{E}[D_{it} | X_{it}, \Phi_{it}] = d_0(X_{it}; \xi_i), \\
+    g_{i0}(X_{it}) &= \mathbb{E}[Y_{it} | X_{it}, \Phi_{it}] = m_{i0}(X_{it})'\theta_0 + e_0(X_{it}) + \xi_i^E.
+\end{align*}
+with $\xi$ denoting a fixed vector of unit-specific fixed treatmentselection effects.
+The residuals $V_{it} := D_{it} - d_{i0}(X_{it})$ and $\tilde{Y}_{it} := Y_{it} - g_{i0}(X_{it})$ then result in the orthogonalized equation:
+\begin{equation*}
+    \tilde{Y}_{it} = V_{it}' \theta_0 + U_{it}, \quad \mathbb{E}[U_{it} | V_{it}, X_{it}, \Phi_{it}] = 0,
+\end{equation*}
+which identifies $\theta_0$ as the coefficient of the best linear projection of $\tilde{Y}_{it}$ on $V_{it}$.
+
+As already mentioned in \cref{subsec:statistical_dependence}, regular cross-fitting does not work for the assumed data structure.
+\textcite{semenova_inference_2023} resolve this with Nighbours-Left-Out (NLO) cross-fitting, where the time series is partitioned into $K$ adjacent bolcks $\{M_k\}_{k=1}^K$.
+Then temporal neighbors are excluded by defining a new quasi-complement of for each block as $M_k^{qc} = \{M_1, \ldots, M_K\} \setminus \{M_l : l \in \mathcal{N}(k)\}$, where $\mathcal{N}(k)$ denotes $k$ and its immediate neighbors.
+Consequently, the method ensures approximate independence between training and test samples.
+
+The complete algorithm consists of three steps:
+\begin{enumerate}
+\item \textbf{Nuisance Estimation:} Estimate the nuisance functions $\hat{g}$ and $\hat{m}$ using appropritae modeling structures and ML methods that can handle fixed effects (for instance lasso for the sparse fixed effects) as well as NLO cross-fitting.
+Afterwards, calculate the residuals $\tilde{Y}_{it}$ and $V_{it}$.
+\item \textbf{Orthogonal Estimation:} Estimate the causal effect parameter vector (the CATE function) $\hat{\theta_0}$ by regressing $\tilde{Y}_{it}$ on $V_{it}$ using Lasso:
+    \begin{equation*}
+        \hat{\theta} = \arg\min_{\theta \in \mathbb{R}^d} \frac{1}{NT} \sum_{i,t} \left( \tilde{Y}_{it} - V_{it}' \theta \right)^2 + \lambda_\theta \|\theta\|_1.
+    \end{equation*}
+with $\lambda_\theta=C_\theta\sqrt{\log d/NT}$ and $C_\theta$ a penalty parameter.
+This selects the relevant interaction terms that drive treatment heterogeneity.
+\item \textbf{Debiased Inference:} To correct for the regularization bias introduced in step 2, construct valid Gaussian confidence intervals for CATE using debiased lasso with an approximate inverse of the residual covariance matrix.
+\end{enumerate}
+
+Similar to the dynamic DML framework in \cref{subsec:dml_dte}, applying this approach to conflict data comes with potential challenges.
+For instance the weak sparsity assumption on residual unit effects $\xi^E$ may be violated by real world data when every spatial unit has unique dense confounders.
+While the model addresses temporal autocorrelation, it assumes cross-sectional independence between units.
+The framework also does not explicitly address spatial spillovers, which is essential for researching conflict (\cref{subsec:sutva}).
+
+\subsection{Other Literature}
+Other recent literature has further expanded DML for dynamic and panel data settings.
 In environments where unobserved time-invariant unit-specific confounding is the primary concern, \textcite{clarke_double_2025} extend DML to static panels with fixed effects.
-They demonstrate an adaption of the neyman orthogonal score to remove unobserved heterogenity while allowing for complex nuisance functions.
-\textcite{bodory_evaluating_2022} introduce a weighting based DML extension strategy for estimating DTEs that robustly adjust for time-varying confounding across treatment sequences.
-Another recent paper that is directly relevant for the context of colfict diffusion, develops DML estimators for impulse resconse functions in locad projections, which model how treatment effects propagate over multipe time periods \cite{ballinari_semiparametric_2025}.
-
-% Key literatuer includes \cite{lewis_doubledebiased_2021, bodory_evaluating_2022, semenova_inference_2023,, clarke_double_2025, ballinari_semiparametric_2025}, which will be surveyed in the following section.
-
-
-\subsection{DML for Heterogenous Treatment Effects}
-
-% 1. Bodory, Huber & Lafférs (2022) - "Evaluating (weighted) dynamic treatment effects by double machine learning" Oxford Academic published in The Econometrics Journal. This paper is closely related to Lewis \& Syrgkanis and also uses Neyman-orthogonal score functions for dynamic treatment sequences under selection-on-observables. It includes weighted estimation for subgroup effects and was published around the same time.
-% 2. Semenova, Goldman, Chernozhukov & Taddy (2023) - "Inference on heterogeneous treatment effects in high-dimensional dynamic panels under weak dependence" Wiley Online Library published in Quantitative Economics. This is a major contribution that develops methods for conditional average treatment effects (CATE) in dynamic panel data with a novel cross-fitting method that "leaves out the neighbors" for weakly dependent data. It handles unit fixed effects differently than Lewis & Syrgkanis.
-% 3. Clarke & Polselli (2025) - "Double Machine Learning for Static Panel Models with Fixed Effects" arXiv in The Econometrics Journal. This very recent paper extends DML to static (not dynamic) panel models with fixed effects using correlated random effects, within-group, and first-difference estimators.
-% Lewis & Syrgkanis (2021) focuses on sequential treatment assignment in Markovian state space models and structural nested mean models (g-estimation framework)
-% Bodory et al. (2022) provides an alternative approach with similar goals but different emphasis on weighted effects
-% Semenova et al. (2023) is particularly important for heterogeneous treatment effects and has more developed theory for handling weak dependence in panel data
-
-% Lewis & Syrgkanis (2021) paper "Double/Debiased Machine Learning for Dynamic Treatment Effects" (this is pobably the most important one, also see what my supervisor said regarding that paper), "Inference on heterogeneous treatment effects in high-dimensional dynamic panels under weak dependence" (Semenova, Goldman, Chernozhukov & Taddy (2023)), and further "Evaluating (weighted) dynamic treatment effects by double machine learning" (Bodory, Huber & Lafférs (2022)) and maybe "Double Machine Learning for Static Panel Models with Fixed Effects" ( Clarke & Polselli (2025)) and maybe "Semiparametric inference for impulse response functions using double/debiased machine learning" (Ballinari & Wehrli (2024/2025)). however feel free to double check everything. so filter trough these papers and tell me which ones you would use and where to place what in the subsection.
-
-% Lewis & Syrgkanis (2021) - Double/Debiased Machine Learning for Dynamic Treatment Effects
-% Bodory, Huber & Lafférs (2022) - Evaluating (weighted) dynamic treatment effects by double machine learning
-% Semenova, Goldman, Chernozhukov & Taddy (2023) - Inference on heterogeneous treatment effects in high-dimensional dynamic panels under weak dependence
-% Clarke & Polselli (2025) - Double Machine Learning for Static Panel Models with Fixed Effects
-% Ballinari & Wehrli (2025) - Semiparametric inference for impulse response functions using double/debiased machine learning
+They demonstrate an adaptation of the Neyman orthogonal score to remove unobserved heterogeneity while allowing for complex nuisance functions.
+\textcite{bodory_evaluating_2022} introduce introduce a weighting based DML extension strategy for estimating dynamic treatment effects, that robustly adjust for time-varying confounding across treatment sequences.
+Another recent paper that is directly relevant for the context of conflict diffusion develops DML estimators for impulse response functions in local projections, which model how treatment effects propagate over multiple time periods \cite{ballinari_semiparametric_2025}.

@@ -2298,3 +2298,18 @@ that the effects are most pronounced in countries with a recent history of civil
 	keywords = {Computer Science - Machine Learning, Economics - Econometrics, Statistics - Machine Learning},
 	file = {Preprint PDF:/Users/nb/Zotero/storage/NJ7AK99J/Lewis and Syrgkanis - 2021 - DoubleDebiased Machine Learning for Dynamic Treatment Effects via g-Estimation.pdf:application/pdf;Snapshot:/Users/nb/Zotero/storage/YJK6GH9C/2002.html:text/html},
 }
+
+@misc{semenova_estimation_2022,
+	title = {Estimation and {Inference} on {Heterogeneous} {Treatment} {Effects} in {High}-{Dimensional} {Dynamic} {Panels} under {Weak} {Dependence}},
+	url = {http://arxiv.org/abs/1712.09988},
+	doi = {10.48550/arXiv.1712.09988},
+	abstract = {This paper provides estimation and inference methods for a conditional average treatment effects (CATE) characterized by a high-dimensional parameter in both homogeneous cross-sectional and unit-heterogeneous dynamic panel data settings. In our leading example, we model CATE by interacting the base treatment variable with explanatory variables. The first step of our procedure is orthogonalization, where we partial out the controls and unit effects from the outcome and the base treatment and take the cross-fitted residuals. This step uses a novel generic cross-fitting method we design for weakly dependent time series and panel data. This method "leaves out the neighbors" when fitting nuisance components, and we theoretically power it by using Strassen's coupling. As a result, we can rely on any modern machine learning method in the first step, provided it learns the residuals well enough. Second, we construct an orthogonal (or residual) learner of CATE -- the Lasso CATE -- that regresses the outcome residual on the vector of interactions of the residualized treatment with explanatory variables. If the complexity of CATE function is simpler than that of the first-stage regression, the orthogonal learner converges faster than the single-stage regression-based learner. Third, we perform simultaneous inference on parameters of the CATE function using debiasing. We also can use ordinary least squares in the last two steps when CATE is low-dimensional. In heterogeneous panel data settings, we model the unobserved unit heterogeneity as a weakly sparse deviation from Mundlak (1978)'s model of correlated unit effects as a linear function of time-invariant covariates and make use of L1-penalization to estimate these models. We demonstrate our methods by estimating price elasticities of groceries based on scanner data. We note that our results are new even for the cross-sectional (i.i.d) case.},
+	urldate = {2026-01-20},
+	publisher = {arXiv},
+	author = {Semenova, Vira and Goldman, Matt and Chernozhukov, Victor and Taddy, Matt},
+	month = dec,
+	year = {2022},
+	note = {arXiv:1712.09988 [stat]},
+	keywords = {Statistics - Machine Learning},
+	file = {Preprint PDF:/Users/nb/Zotero/storage/38QCFBNI/Semenova et al. - 2022 - Estimation and Inference on Heterogeneous Treatment Effects in High-Dimensional Dynamic Panels under.pdf:application/pdf;Snapshot:/Users/nb/Zotero/storage/3P69ZIAJ/1712.html:text/html},
+}
